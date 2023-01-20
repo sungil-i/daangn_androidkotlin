@@ -6,13 +6,25 @@
 	android:layout_height="match_parent"
 	tools:context=".MainActivity">
 
-	<!--<TextView
-		android:layout_width="wrap_content"
+	<FrameLayout
+		android:id="@+id/fl_container"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		app:layout_constraintBottom_toTopOf="@+id/btnv_menu"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent" />
+
+	<com.google.android.material.bottomnavigation.BottomNavigationView
+		android:id="@+id/btnv_menu"
+		android:layout_width="0dp"
 		android:layout_height="wrap_content"
-		android:text="당근 마켓!!"
+		app:itemIconTint="@drawable/selector_menu_color"
+		app:itemRippleColor="@null"
+		app:itemTextColor="@color/black"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent" />-->
+		app:menu="@menu/btnv_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
