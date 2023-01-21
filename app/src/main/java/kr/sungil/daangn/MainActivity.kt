@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
 				getString(R.string.check_login),
 				Toast.LENGTH_LONG
 			).show()
-			startActivity(Intent(this, LoginActivity::class.java))
+//			startActivity(Intent(this, LoginActivity::class.java))
 		}
 	}
 

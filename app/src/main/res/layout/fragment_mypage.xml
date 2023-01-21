@@ -28,11 +28,11 @@
 			app:layout_constraintTop_toTopOf="parent" />
 
 		<ImageView
-			android:contentDescription="로그인"
 			android:id="@+id/iv_login"
 			android:layout_width="30dp"
 			android:layout_height="30dp"
 			android:layout_marginEnd="30dp"
+			android:contentDescription="로그인"
 			android:src="@drawable/icon_login"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
@@ -44,6 +44,7 @@
 			android:id="@+id/tv_myid"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:layout_marginTop="-10dp"
 			android:layout_marginEnd="20dp"
 			android:textColor="@color/white"
 			android:textSize="@dimen/appbar_myid_size"
@@ -55,24 +56,24 @@
 			tools:visibility="visible" />
 
 		<TextView
+			android:id="@+id/tv_email"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:id="@+id/tv_email"
-			tools:text="aaa.aaa"
+			android:textColor="@color/white"
 			android:textSize="@dimen/appbar_email_size"
 			android:visibility="invisible"
-			tools:visibility="visible"
-			app:layout_constraintTop_toBottomOf="@+id/tv_myid"
-			app:layout_constraintStart_toStartOf="@+id/tv_myid"
 			app:layout_constraintEnd_toEndOf="@+id/tv_myid"
-			android:textColor="@color/white"/>
+			app:layout_constraintStart_toStartOf="@+id/tv_myid"
+			app:layout_constraintTop_toBottomOf="@+id/tv_myid"
+			tools:text="aaa.aaa"
+			tools:visibility="visible" />
 
 		<ImageView
-			android:contentDescription="로그아웃"
 			android:id="@+id/iv_logout"
 			android:layout_width="30dp"
 			android:layout_height="30dp"
 			android:layout_marginEnd="10dp"
+			android:contentDescription="로그아웃"
 			android:src="@drawable/icon_logout"
 			android:visibility="invisible"
 			app:layout_constraintBottom_toBottomOf="parent"
@@ -84,5 +85,112 @@
 
 	</androidx.constraintlayout.widget.ConstraintLayout>
 	<!--Appbar 마지막-->
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:id="@+id/cl_mypage"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		android:visibility="invisible"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/cl_appbar"
+		tools:visibility="visible">
+
+		<!--Information Label-->
+		<TextView
+			android:id="@+id/tv_info_nickname"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="30dp"
+			android:layout_marginTop="30dp"
+			android:text="채팅 닉네임"
+			android:textSize="@dimen/mypage_text"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<TextView
+			android:id="@+id/tv_info_email"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/mypage_textview_margintop"
+			android:text="이메일"
+			android:textSize="@dimen/mypage_text"
+			app:layout_constraintStart_toStartOf="@+id/tv_info_nickname"
+			app:layout_constraintTop_toBottomOf="@+id/tv_info_nickname" />
+
+		<TextView
+			android:id="@+id/tv_info_name"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/mypage_textview_margintop"
+			android:text="이름"
+			android:textSize="@dimen/mypage_text"
+			app:layout_constraintStart_toStartOf="@+id/tv_info_nickname"
+			app:layout_constraintTop_toBottomOf="@+id/tv_info_email" />
+
+		<!--Information EditText-->
+		<EditText
+			android:id="@+id/et_info_nickname"
+			android:layout_width="@dimen/mypage_edittext_size"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="20dp"
+			android:layout_marginTop="@dimen/mypage_edittext_margintop"
+			android:hint="채팅에 사용할 닉네임"
+			android:textSize="@dimen/mypage_text"
+			app:layout_constraintStart_toEndOf="@+id/tv_info_nickname"
+			app:layout_constraintTop_toTopOf="@+id/tv_info_nickname" />
+
+		<EditText
+			android:id="@+id/et_info_email"
+			android:layout_width="@dimen/mypage_edittext_size"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/mypage_edittext_margintop"
+			android:focusable="false"
+			android:textColor="@color/gray_ec"
+			app:layout_constraintStart_toStartOf="@+id/et_info_nickname"
+			app:layout_constraintTop_toTopOf="@+id/tv_info_email" />
+
+		<EditText
+			android:id="@+id/et_info_name"
+			android:layout_width="@dimen/mypage_edittext_size"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/mypage_edittext_margintop"
+			android:hint="이름을 입력하세요."
+			android:textSize="@dimen/mypage_text"
+			app:layout_constraintStart_toStartOf="@+id/et_info_nickname"
+			app:layout_constraintTop_toTopOf="@+id/tv_info_name" />
+
+		<androidx.constraintlayout.widget.ConstraintLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="30dp"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/tv_info_name">
+
+			<Button
+				android:id="@+id/bt_save"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:backgroundTint="@color/orange"
+				android:text="저장하기"
+				app:layout_constraintEnd_toStartOf="@+id/bt_cancel"
+				app:layout_constraintHorizontal_bias="0.5"
+				app:layout_constraintStart_toStartOf="parent" />
+
+			<Button
+				android:id="@+id/bt_cancel"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:backgroundTint="@color/orange"
+				android:text="취소"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintHorizontal_bias="0.5"
+				app:layout_constraintStart_toEndOf="@+id/bt_save" />
+
+		</androidx.constraintlayout.widget.ConstraintLayout>
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

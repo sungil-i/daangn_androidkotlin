@@ -4,19 +4,24 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kr.sungil.daangn.databinding.ActivityLoginBinding
 import kr.sungil.daangn.AppConfig.Companion.AUTH
-import kr.sungil.daangn.AppConfig.Companion.MYDEBUG
+import kr.sungil.daangn.AppConfig.Companion.DB_USERS
+import kr.sungil.daangn.models.UserModel
 
 class LoginActivity : AppCompatActivity() {
 	private lateinit var binding: ActivityLoginBinding
+	private lateinit var userDB: DatabaseReference
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		binding = ActivityLoginBinding.inflate(layoutInflater)
 		setContentView(binding.root)
+
+		// Firebase Database
+		userDB = Firebase.database.reference.child(DB_USERS)
 
 		initButtons()
 		initEditText()
@@ -26,10 +31,10 @@ class LoginActivity : AppCompatActivity() {
 		// 로그인, 로그아웃 버튼 이벤트
 		binding.btLoginOut.setOnClickListener {
 			binding.let {
-				val email = binding.etEmail.text.toString()
-				val password = binding.etPassword.text.toString()
+				val email = binding.etEmail.text.toString().trim()
+				val password = binding.etPassword.text.toString().trim()
 
-				if (AUTH.currentUser == null) { // 로그인 버튼일 경우
+				if (binding.btLoginOut.text.equals("로그인")) { // 로그인 버튼일 경우
 					// Firebase 에 email 과 paassword 를 사용하여 로그인합니다.
 					AUTH.signInWithEmailAndPassword(email, password)
 						.addOnCompleteListener(this) { task ->
@@ -43,7 +48,7 @@ class LoginActivity : AppCompatActivity() {
 								).show()
 							}
 						}
-				} else { // 로그아웃 버튼일 경우
+				} else if (binding.btLoginOut.text.equals("로그아웃")) { // 로그아웃 버튼일 경우
 					AUTH.signOut()
 					binding.etEmail.text.clear()
 					binding.etEmail.isEnabled = true
@@ -60,19 +65,27 @@ class LoginActivity : AppCompatActivity() {
 		// 회원가입 버튼 이벤트
 		binding.btSignup.setOnClickListener {
 			binding.let {
-				val email = it.etEmail.text.toString()
-				val password = it.etPassword.text.toString()
+				val email = it.etEmail.text.toString().trim()
+				val password = it.etPassword.text.toString().trim()
 
 				// Firebase 에 email, password 로 사용자를 생성합니다.
 				AUTH.createUserWithEmailAndPassword(email, password)
 					.addOnCompleteListener(this) { task ->
 						if (task.isSuccessful) { // 회원가입 성공
+							// Firebase Database 저장
+							val userModel = UserModel(
+								email = AUTH.currentUser!!.email,
+								name = "",
+								nickname = ""
+							)
+//							userDB.push().setValue(userModel)
+							userDB.child(AUTH.currentUser!!.uid).setValue(userModel)
+
 							Toast.makeText(
 								applicationContext,
 								getString(R.string.signup_ok),
 								Toast.LENGTH_SHORT
-							)
-								.show()
+							).show()
 						} else { // 회원가입 실패
 							Toast.makeText(
 								applicationContext,
@@ -101,10 +114,10 @@ class LoginActivity : AppCompatActivity() {
 			getString(R.string.login_ok),
 			Toast.LENGTH_SHORT
 		).show()
-		binding.etEmail.isEnabled = false
-		binding.etPassword.isEnabled = false
-		binding.btSignup.isEnabled = false
-		binding.btLoginOut.text = "로그아웃"
+//		binding.etEmail.isEnabled = false
+//		binding.etPassword.isEnabled = false
+//		binding.btSignup.isEnabled = false
+//		binding.btLoginOut.text = "로그아웃"
 		finish()
 	}
 

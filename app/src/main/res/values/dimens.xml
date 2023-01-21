@@ -2,5 +2,9 @@
 <resources>
 	<dimen name="appbar_height">60dp</dimen>
 	<dimen name="appbar_myid_size">20sp</dimen>
-	<dimen name="appbar_email_size">7dp</dimen>
+	<dimen name="appbar_email_size">10dp</dimen>
+	<dimen name="mypage_text">20sp</dimen>
+	<dimen name="mypage_edittext_size">200dp</dimen>
+	<dimen name="mypage_edittext_margintop">-13dp</dimen>
+	<dimen name="mypage_textview_margintop">20dp</dimen>
 </resources>
