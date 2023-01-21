@@ -7,4 +7,6 @@
 	<dimen name="mypage_edittext_size">200dp</dimen>
 	<dimen name="mypage_edittext_margintop">-13dp</dimen>
 	<dimen name="mypage_textview_margintop">20dp</dimen>
+	<dimen name="login_out_button_text_size">20sp</dimen>
+	<dimen name="login_out_button_text_padding">15dp</dimen>
 </resources>
