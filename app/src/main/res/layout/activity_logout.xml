@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context=".LoginActivity">
+
+	<!--Appbar 시작-->
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:id="@+id/cl_appbar"
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/appbar_height"
+		android:background="@color/orange"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="30dp"
+			android:text="로그아웃"
+			android:textColor="@color/white"
+			android:textSize="25sp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+	<!--Appbar 마지막-->
+
+	<Button
+		android:id="@+id/bt_logout"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:backgroundTint="@color/orange"
+		android:text="로그아웃 합니다"
+		android:textSize="30sp"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/cl_appbar" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
