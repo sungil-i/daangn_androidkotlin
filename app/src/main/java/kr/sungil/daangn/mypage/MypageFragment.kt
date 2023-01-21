@@ -82,8 +82,6 @@ class MypageFragment : Fragment(R.layout.fragment_mypage) {
 						nickname = nickname,
 					)
 					userDB.child(AUTH.currentUser!!.uid).updateChildren(userModel.toMap())
-					Log.d(MYDEBUG, "initSaveButton: ${userModel.toString()}")
-					Log.d(MYDEBUG, "initSaveButton: ${userModel.toMap()}")
 				}
 			}
 		}
