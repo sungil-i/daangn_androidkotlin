@@ -3,9 +3,86 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:background="#00FF00"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	tools:context=".chat.ChatFragment">
 
+	<!--Appbar 시작-->
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:id="@+id/cl_appbar"
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/appbar_height"
+		android:background="@color/orange"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent">
 
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="30dp"
+			android:text="채팅"
+			android:textColor="@color/white"
+			android:textSize="25sp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<ImageView
+			android:contentDescription="로그인"
+			android:id="@+id/iv_login"
+			android:layout_width="30dp"
+			android:layout_height="30dp"
+			android:layout_marginEnd="30dp"
+			android:src="@drawable/icon_login"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:tint="@color/dark_orange2"
+			tools:visibility="invisible" />
+
+		<TextView
+			android:id="@+id/tv_myid"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginEnd="20dp"
+			android:textColor="@color/white"
+			android:textSize="@dimen/appbar_myid_size"
+			android:visibility="invisible"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toStartOf="@+id/iv_logout"
+			app:layout_constraintTop_toTopOf="parent"
+			tools:text="upj53"
+			tools:visibility="visible" />
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:id="@+id/tv_email"
+			tools:text="aaa.aaa"
+			android:textSize="@dimen/appbar_email_size"
+			android:visibility="invisible"
+			tools:visibility="visible"
+			app:layout_constraintTop_toBottomOf="@+id/tv_myid"
+			app:layout_constraintStart_toStartOf="@+id/tv_myid"
+			app:layout_constraintEnd_toEndOf="@+id/tv_myid"
+			android:textColor="@color/white"/>
+
+		<ImageView
+			android:contentDescription="로그아웃"
+			android:id="@+id/iv_logout"
+			android:layout_width="30dp"
+			android:layout_height="30dp"
+			android:layout_marginEnd="10dp"
+			android:src="@drawable/icon_logout"
+			android:visibility="invisible"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:tint="@color/dark_orange2"
+			tools:visibility="visible" />
+
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+	<!--Appbar 마지막-->
 
 </FrameLayout>

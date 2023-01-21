@@ -2,7 +2,11 @@ package kr.sungil.daangn
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
+import com.google.firebase.auth.FirebaseAuth
+import kr.sungil.daangn.AppConfig.Companion.AUTH
+import kr.sungil.daangn.AppConfig.Companion.MYDEBUG
 import kr.sungil.daangn.chat.ChatFragment
 import kr.sungil.daangn.databinding.ActivityMainBinding
 import kr.sungil.daangn.home.HomeFragment
@@ -15,6 +19,9 @@ class MainActivity : AppCompatActivity() {
 		// view binding 연결
 		binding = ActivityMainBinding.inflate(layoutInflater)
 		setContentView(binding.root)
+
+		// Firebase AUTH 초기화
+		AUTH = FirebaseAuth.getInstance()
 
 		// fragment 생성
 		val homeFragment = HomeFragment()
@@ -38,6 +45,16 @@ class MainActivity : AppCompatActivity() {
 				}
 			}
 			true
+		}
+	}
+
+	override fun onStart() {
+		super.onStart()
+
+		if(AUTH.currentUser == null) {
+			Log.d(MYDEBUG, "MainActivity onStart: 로그인을 해주세요.")
+		} else {
+			Log.d(MYDEBUG, "MainActivity onStart: ${AUTH.currentUser}")
 		}
 	}
 
