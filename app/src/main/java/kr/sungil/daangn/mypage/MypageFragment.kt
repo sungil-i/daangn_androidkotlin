@@ -31,10 +31,12 @@ class MypageFragment : Fragment(R.layout.fragment_mypage) {
 	}
 
 	private fun initLogInOutButton() {
+		// 로그인 버튼 이벤트
 		binding!!.ivLogin.setOnClickListener {
 			startActivity(Intent(context, LoginActivity::class.java))
 		}
 
+		// 로그아웃 버튼 이벤트
 		binding!!.ivLogout.setOnClickListener {
 			if (AUTH.currentUser != null) {
 				startActivity(Intent(context, LogoutActivity::class.java))
@@ -47,17 +49,20 @@ class MypageFragment : Fragment(R.layout.fragment_mypage) {
 		super.onStart()
 
 		if (AUTH.currentUser == null) {
+			// Firebase 로그인 인증값이 없다.
 			Toast.makeText(
 				context,
 				getString(R.string.check_login),
 				Toast.LENGTH_LONG
 			).show()
+
+			// 상단 Appbar 로그인 정보를 안보이게 한다.
 			binding!!.ivLogin.isVisible = true
 			binding!!.tvMyid.isVisible = false
 			binding!!.tvEmail.isVisible = false
 			binding!!.ivLogout.isVisible = false
 		} else {
-			Log.d(MYDEBUG, "MypageFragment onStart: ${AUTH.currentUser}")
+			// 상단 Appbar 로그인 정보를 보이게 설정한다.
 			binding!!.ivLogin.isVisible = false
 			binding!!.tvMyid.text = AUTH.currentUser!!.email?.split("@")?.get(0) ?: ""
 			val strEmail = AUTH.currentUser!!.email?.split("@")?.get(1) ?: ""

@@ -1,8 +1,10 @@
 package kr.sungil.daangn
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import kr.sungil.daangn.AppConfig.Companion.AUTH
@@ -51,10 +53,14 @@ class MainActivity : AppCompatActivity() {
 	override fun onStart() {
 		super.onStart()
 
-		if(AUTH.currentUser == null) {
-			Log.d(MYDEBUG, "MainActivity onStart: 로그인을 해주세요.")
-		} else {
-			Log.d(MYDEBUG, "MainActivity onStart: ${AUTH.currentUser}")
+		// Reload 될때마다 로그인을 체크한다.
+		if (AUTH.currentUser == null) {
+			Toast.makeText(
+				this,
+				getString(R.string.check_login),
+				Toast.LENGTH_LONG
+			).show()
+			startActivity(Intent(this, LoginActivity::class.java))
 		}
 	}
 

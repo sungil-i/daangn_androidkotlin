@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.widget.Toast
 import kr.sungil.daangn.AppConfig.Companion.AUTH
 import kr.sungil.daangn.databinding.ActivityLogoutBinding
-import kotlin.math.log
 
 class LogoutActivity : AppCompatActivity() {
 	private lateinit var binding: ActivityLogoutBinding
@@ -14,6 +13,7 @@ class LogoutActivity : AppCompatActivity() {
 		binding = ActivityLogoutBinding.inflate(layoutInflater)
 		setContentView(binding.root)
 
+		// 로그아웃 버튼 이벤트
 		binding.btLogout.setOnClickListener {
 			logout()
 		}
@@ -21,6 +21,7 @@ class LogoutActivity : AppCompatActivity() {
 
 	private fun logout() {
 		if (AUTH.currentUser != null) {
+			// 로그아웃 하고 Activity 를 닫습니다.
 			AUTH.signOut()
 			Toast.makeText(
 				this,
