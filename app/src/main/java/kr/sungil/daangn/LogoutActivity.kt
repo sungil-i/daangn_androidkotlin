@@ -13,9 +13,20 @@ class LogoutActivity : AppCompatActivity() {
 		binding = ActivityLogoutBinding.inflate(layoutInflater)
 		setContentView(binding.root)
 
-		// 로그아웃 버튼 이벤트
-		binding.btLogout.setOnClickListener {
-			logout()
+		initButtons()
+	}
+
+	private fun initButtons() {
+		binding.apply {
+			// 로그아웃 버튼 이벤트
+			btLogout.setOnClickListener {
+				logout()
+			}
+
+			// 창 닫기 버튼 이벤트
+			ivClose.setOnClickListener {
+				finish()
+			}
 		}
 	}
 

@@ -28,15 +28,17 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 	}
 
 	private fun initLogInOutButton() {
-		// 로그인 버튼 이벤트
-		binding!!.ivLogin.setOnClickListener {
-			startActivity(Intent(context, LoginActivity::class.java))
-		}
+		binding!!.apply {
+			// 로그인 버튼 이벤트
+			ivLogin.setOnClickListener {
+				startActivity(Intent(context, LoginActivity::class.java))
+			}
 
-		// 로그아웃 버튼 이벤트
-		binding!!.ivLogout.setOnClickListener {
-			if (AUTH.currentUser != null) {
-				startActivity(Intent(context, LogoutActivity::class.java))
+			// 로그아웃 버튼 이벤트
+			ivLogout.setOnClickListener {
+				if (AUTH.currentUser != null) {
+					startActivity(Intent(context, LogoutActivity::class.java))
+				}
 			}
 		}
 	}
@@ -45,28 +47,30 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 		// 앱이 Reload 했을 때 로그인 인증을 다시 확인한다.
 		super.onStart()
 
-		if (AUTH.currentUser == null) {
-			// Firebase 로그인 인증값이 없다.
-			Toast.makeText(
-				context,
-				getString(R.string.check_login),
-				Toast.LENGTH_LONG
-			).show()
+		binding!!.apply {
+			if (AUTH.currentUser == null) {
+				// Firebase 로그인 인증값이 없다.
+				Toast.makeText(
+					context,
+					getString(R.string.check_login),
+					Toast.LENGTH_LONG
+				).show()
 
-			// 상단 Appbar 로그인 정보를 안보이게 한다.
-			binding!!.ivLogin.isVisible = true
-			binding!!.tvMyid.isVisible = false
-			binding!!.tvEmail.isVisible = false
-			binding!!.ivLogout.isVisible = false
-		} else {
-			// 상단 Appbar 로그인 정보를 보이게 설정한다.
-			binding!!.ivLogin.isVisible = false
-			binding!!.tvMyid.text = AUTH.currentUser!!.email?.split("@")?.get(0) ?: ""
-			val strEmail = AUTH.currentUser!!.email?.split("@")?.get(1) ?: ""
-			"@$strEmail".also { binding!!.tvEmail.text = it }
-			binding!!.tvMyid.isVisible = true
-			binding!!.tvEmail.isVisible = true
-			binding!!.ivLogout.isVisible = true
+				// 상단 Appbar 로그인 정보를 안보이게 한다.
+				ivLogin.isVisible = true
+				tvMyid.isVisible = false
+				tvEmail.isVisible = false
+				ivLogout.isVisible = false
+			} else {
+				// 상단 Appbar 로그인 정보를 보이게 설정한다.
+				ivLogin.isVisible = false
+				tvMyid.text = AUTH.currentUser!!.email?.split("@")?.get(0) ?: ""
+				val strEmail = AUTH.currentUser!!.email?.split("@")?.get(1) ?: ""
+				"@$strEmail".also { tvEmail.text = it }
+				tvMyid.isVisible = true
+				tvEmail.isVisible = true
+				ivLogout.isVisible = true
+			}
 		}
 	}
 }

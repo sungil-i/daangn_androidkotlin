@@ -7,6 +7,8 @@ data class UserModel(
 	var name: String?,
 	var nickname: String?,
 ) {
+	constructor() : this("", "", "")
+
 	@Exclude
 	fun toMap(): Map<String, Any?> {
 		return mapOf(
