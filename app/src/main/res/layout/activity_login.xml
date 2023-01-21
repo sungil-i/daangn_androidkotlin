@@ -4,6 +4,7 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
+	android:background="@color/orange_light"
 	tools:context=".LoginActivity">
 
 	<!--Appbar 시작-->
@@ -50,6 +51,9 @@
 		android:layout_marginEnd="20dp"
 		android:hint="이메일을 입력하세요."
 		android:inputType="textEmailAddress"
+		android:textColor="@color/white"
+		android:textColorHint="@color/white"
+		android:textSize="25sp"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/cl_appbar" />
@@ -63,6 +67,9 @@
 		android:layout_marginEnd="20dp"
 		android:hint="암호를 입력하세요."
 		android:inputType="textPassword"
+		android:textColor="@color/white"
+		android:textColorHint="@color/white"
+		android:textSize="25sp"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/et_email" />

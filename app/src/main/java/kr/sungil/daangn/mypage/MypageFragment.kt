@@ -128,9 +128,13 @@ class MypageFragment : Fragment(R.layout.fragment_mypage) {
 					val userModel = it.getValue(UserModel::class.java)
 					if (userModel!!.nickname!!.isNotEmpty()) {
 						etInfoNickname.setText(userModel.nickname)
+					} else {
+						etInfoNickname.setText("")
 					}
 					if (userModel.name!!.isNotEmpty()) {
 						etInfoName.setText(userModel.name)
+					} else {
+						etInfoName.setText("")
 					}
 				}.addOnFailureListener {
 //				Log.d(MYDEBUG, "initEditText: FAIL}")
