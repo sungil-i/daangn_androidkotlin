@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<dimen name="appbar_height">60dp</dimen>
+	<dimen name="appbar_myid_size">20sp</dimen>
+	<dimen name="appbar_email_size">7dp</dimen>
+</resources>
