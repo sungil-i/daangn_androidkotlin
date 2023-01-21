@@ -40,6 +40,7 @@ class MypageFragment : Fragment(R.layout.fragment_mypage) {
 		initLogInOutButton()
 		initEditText()
 		initSaveButton()
+		initCancelButton()
 	}
 
 	private fun initLogInOutButton() {
@@ -90,6 +91,38 @@ class MypageFragment : Fragment(R.layout.fragment_mypage) {
 		}
 	}
 
+	private fun initCancelButton() {
+		binding!!.apply {
+			btCancel.setOnClickListener {
+				getDataFromDatabase()
+				tvMessage.text = "회원정보 수정을 취소합니다."
+			}
+		}
+	}
+
+	private fun getDataFromDatabase() {
+		binding!!.apply {
+			if (AUTH.currentUser != null) {
+				// Firebase Database 에서 저장된 값을 가져옵니다.
+				userDB.child(AUTH.currentUser!!.uid).get().addOnSuccessListener {
+					val userModel = it.getValue(UserModel::class.java)
+					if (userModel!!.nickname!!.isNotEmpty()) {
+						etInfoNickname.setText(userModel.nickname)
+					} else {
+						etInfoNickname.setText("")
+					}
+					if (userModel.name!!.isNotEmpty()) {
+						etInfoName.setText(userModel.name)
+					} else {
+						etInfoName.setText("")
+					}
+				}.addOnFailureListener {
+//				Log.d(MYDEBUG, "initEditText: FAIL}")
+				}
+			}
+		}
+	}
+
 	override fun onStart() {
 		// 앱이 Reload 했을 때 로그인 인증을 다시 확인한다.
 		super.onStart()
@@ -123,22 +156,7 @@ class MypageFragment : Fragment(R.layout.fragment_mypage) {
 				etInfoEmail.setText(myEmail)
 
 				// Firebase Database 에서 저장된 값을 가져옵니다.
-				userDB.child(AUTH.currentUser!!.uid).get().addOnSuccessListener {
-//					Log.d(MYDEBUG, "initEditText: ${it.toString()}")
-					val userModel = it.getValue(UserModel::class.java)
-					if (userModel!!.nickname!!.isNotEmpty()) {
-						etInfoNickname.setText(userModel.nickname)
-					} else {
-						etInfoNickname.setText("")
-					}
-					if (userModel.name!!.isNotEmpty()) {
-						etInfoName.setText(userModel.name)
-					} else {
-						etInfoName.setText("")
-					}
-				}.addOnFailureListener {
-//				Log.d(MYDEBUG, "initEditText: FAIL}")
-				}
+				getDataFromDatabase()
 			}
 		}
 	}
