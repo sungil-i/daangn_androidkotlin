@@ -15,6 +15,9 @@
 		android:theme="@style/Theme.SungilDaangn"
 		tools:targetApi="31">
 		<activity
+			android:name=".AddPostActivity"
+			android:exported="false" />
+		<activity
 			android:name=".LogoutActivity"
 			android:exported="false" />
 		<activity
