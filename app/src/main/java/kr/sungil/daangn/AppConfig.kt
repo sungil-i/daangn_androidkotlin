@@ -9,6 +9,7 @@ class AppConfig {
 		const val DB_USERS = "SungilUsers"
 		const val DB_CHATS = "SungilChats"
 		const val CHILD_CHAT = "chat"
+		// 설정값
 		const val MYDEBUG = "MY_DEBUG" // Log.d 태그값
 		lateinit var AUTH: FirebaseAuth // Firebase 인증 정보
 	}

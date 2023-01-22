@@ -72,13 +72,13 @@ class LoginActivity : AppCompatActivity() {
 				AUTH.createUserWithEmailAndPassword(email, password)
 					.addOnCompleteListener() { task ->
 						if (task.isSuccessful) { // 회원가입 성공
-							// Firebase Database 저장
+							// Firebase Database 에 UserModel 객체를 저장합니다.
 							val userModel = UserModel(
 								email = AUTH.currentUser!!.email,
 								name = "",
 								nickname = ""
 							)
-//							userDB.push().setValue(userModel)
+							// 객체 저장
 							userDB.child(AUTH.currentUser!!.uid).setValue(userModel)
 
 							Toast.makeText(
@@ -113,16 +113,12 @@ class LoginActivity : AppCompatActivity() {
 			return
 		}
 
-		// 로그인 성공
+		// 로그인 성공하면 Activity 를 닫습니다.
 		Toast.makeText(
 			applicationContext,
 			getString(R.string.login_ok),
 			Toast.LENGTH_SHORT
 		).show()
-//		binding.etEmail.isEnabled = false
-//		binding.etPassword.isEnabled = false
-//		binding.btSignup.isEnabled = false
-//		binding.btLoginOut.text = "로그아웃"
 		finish()
 	}
 

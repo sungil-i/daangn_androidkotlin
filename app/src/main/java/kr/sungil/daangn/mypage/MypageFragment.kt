@@ -60,6 +60,7 @@ class MypageFragment : Fragment(R.layout.fragment_mypage) {
 	}
 
 	private fun initEditText() {
+		// EditText 값이 있을 때만 버튼을 활성화 합니다.
 		binding!!.apply {
 			etInfoNickname.addTextChangedListener {
 				val enable = etInfoNickname.text.isNotEmpty() && etInfoName.text.isNotEmpty()
@@ -84,6 +85,7 @@ class MypageFragment : Fragment(R.layout.fragment_mypage) {
 						name = name,
 						nickname = nickname,
 					)
+					// Firebase Database 에 UserModel 객체를 저장합니다.
 					userDB.child(AUTH.currentUser!!.uid).updateChildren(userModel.toMap())
 					tvMessage.text = "회원정보를 업데이트 했습니다!"
 				}
@@ -94,6 +96,7 @@ class MypageFragment : Fragment(R.layout.fragment_mypage) {
 	private fun initCancelButton() {
 		binding!!.apply {
 			btCancel.setOnClickListener {
+				// 취소 버튼을 누르면 원래 DB에 저장되어 있던 값으로 초기화 합니다.
 				getDataFromDatabase()
 				tvMessage.text = "회원정보 수정을 취소합니다."
 			}
@@ -101,10 +104,11 @@ class MypageFragment : Fragment(R.layout.fragment_mypage) {
 	}
 
 	private fun getDataFromDatabase() {
+		// Firebase Database 에서 저장된 값을 가져오는 함수
 		binding!!.apply {
 			if (AUTH.currentUser != null) {
-				// Firebase Database 에서 저장된 값을 가져옵니다.
 				userDB.child(AUTH.currentUser!!.uid).get().addOnSuccessListener {
+					// Firebase 에서 데이터 가져오기 성공
 					val userModel = it.getValue(UserModel::class.java)
 					if (userModel!!.nickname!!.isNotEmpty()) {
 						etInfoNickname.setText(userModel.nickname)
@@ -117,6 +121,7 @@ class MypageFragment : Fragment(R.layout.fragment_mypage) {
 						etInfoName.setText("")
 					}
 				}.addOnFailureListener {
+					// Firebase 에서 데이터 가져오기 실패
 //				Log.d(MYDEBUG, "initEditText: FAIL}")
 				}
 			}
