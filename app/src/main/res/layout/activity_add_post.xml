@@ -4,6 +4,108 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	tools:context=".home.AddPostActivity">
+	tools:context="home.AddPostActivity">
+
+	<!--Appbar 시작-->
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:id="@+id/cl_appbar"
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/appbar_height"
+		android:background="@color/orange"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="30dp"
+			android:text="새 글 등록"
+			android:textColor="@color/white"
+			android:textSize="25sp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<ImageView
+			android:id="@+id/iv_close"
+			android:layout_width="25dp"
+			android:layout_height="25dp"
+			android:layout_marginEnd="20dp"
+			android:src="@drawable/icon_close"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:tint="@color/white" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+	<!--Appbar 마지막-->
+
+	<EditText
+		android:id="@+id/et_title"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		android:layout_marginTop="16dp"
+		android:layout_marginEnd="16dp"
+		android:hint="글 제목"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/cl_appbar" />
+
+	<EditText
+		android:id="@+id/et_price"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		android:layout_marginEnd="16dp"
+		android:hint="가격"
+		android:inputType="numberDecimal"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/et_title" />
+
+	<ImageView
+		android:id="@+id/iv_photo"
+		android:layout_width="250dp"
+		android:layout_height="250dp"
+		android:layout_marginTop="20dp"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/et_price" />
+
+	<Button
+		android:id="@+id/bt_add_image"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:backgroundTint="@color/orange"
+		android:text="이미지 업로드"
+		app:layout_constraintEnd_toEndOf="@id/iv_photo"
+		app:layout_constraintStart_toStartOf="@id/iv_photo"
+		app:layout_constraintTop_toBottomOf="@id/iv_photo" />
+
+	<Button
+		android:id="@+id/bt_submit"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		android:layout_marginEnd="16dp"
+		android:layout_marginBottom="16dp"
+		android:backgroundTint="@color/orange"
+		android:text="등록하기"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent" />
+
+	<ProgressBar
+		android:id="@+id/pb_upload_progress"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:visibility="gone"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

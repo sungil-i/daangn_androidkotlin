@@ -25,6 +25,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 		binding = _binding
 
 		initLogInOutButton()
+		initFloatingActionButton()
 	}
 
 	private fun initLogInOutButton() {
@@ -38,6 +39,26 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 			ivLogout.setOnClickListener {
 				if (AUTH.currentUser != null) {
 					startActivity(Intent(context, LogoutActivity::class.java))
+				}
+			}
+		}
+	}
+
+	private fun initFloatingActionButton() {
+		// FloatingActionButton 클릭 이벤트
+		binding!!.apply {
+			fabAdd.setOnClickListener {
+				if (AUTH.currentUser != null) {
+					// 로그인을 했을 경우만 사용할 수 있다.
+					val intent = Intent(context, AddPostActivity::class.java)
+					startActivity(intent)
+				} else {
+					// Firebase 로그인 인증값이 없다.
+					Toast.makeText(
+						context,
+						getString(R.string.check_login),
+						Toast.LENGTH_LONG
+					).show()
 				}
 			}
 		}
