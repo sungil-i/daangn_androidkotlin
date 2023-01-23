@@ -104,12 +104,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 			if (AUTH.currentUser != null) { // 로그인을 한 경우
 				if (it.sellerId == AUTH.currentUser?.uid) { // 내가 올린 글
 					// 내 글 수정하기 창을 띄웁니다.
-					//todo modify my post
-					Toast.makeText(
-						context,
-						"나의 글입니다. 수정창 띄우기",
-						Toast.LENGTH_LONG
-					).show()
+					val intent = Intent(context, ModifyPostActivity::class.java)
+					intent.putExtra("postModel", it)
+					intent.putExtra("idx", it.idx)
+					startActivity(intent)
 				} else { // 다른 사람이 올린 글
 					// 글을 보는 창을 띄웁니다.
 					Toast.makeText(
@@ -132,6 +130,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 	override fun onStart() {
 		// 앱이 Reload 했을 때 로그인 인증을 다시 확인한다.
 		super.onStart()
+		adapter.notifyDataSetChanged()
 
 		binding!!.apply {
 			if (AUTH.currentUser == null) {

@@ -86,6 +86,8 @@
 	</androidx.constraintlayout.widget.ConstraintLayout>
 	<!--Appbar 마지막-->
 
+
+
 	<androidx.recyclerview.widget.RecyclerView
 		android:id="@+id/rv_posts"
 		android:layout_width="0dp"

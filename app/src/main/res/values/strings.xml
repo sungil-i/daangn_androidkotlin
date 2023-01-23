@@ -11,4 +11,5 @@
 	<string name="image_upload_fail">사진 업로드에 실패했습니다.</string>
 	<string name="image_upload_ok">사진을 업로드했습니다.</string>
 	<string name="post_submit_ok">성공적으로 업로드 하였습니다.</string>
+	<string name="there_is_error">오류가 있습니다.</string>
 </resources>

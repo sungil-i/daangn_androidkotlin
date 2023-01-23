@@ -49,8 +49,8 @@ class PostAdapter(
 			binding.apply {
 				tvTitle.text = postModel.title
 				tvDuration.text = getDiffTime(diffTime)
-				tvDate.text = dateFormat.format(date).toString()
-				tvPrice.text = priceFormat.format(postModel.price).toString()
+				tvDate.text = "${dateFormat.format(date)}"
+				tvPrice.text = "${priceFormat.format(postModel.price)}원"
 
 				if (postModel.imageUrl.isNotEmpty()) {
 					Glide.with(ivProduct)
@@ -67,10 +67,10 @@ class PostAdapter(
 
 	private fun getDiffTime(diffTime: Long): String {
 		var strDiffTime = ""
-		if(diffTime >= ONE_YEAR) {
+		if (diffTime >= ONE_YEAR) {
 			val dr = (diffTime / ONE_YEAR).toInt()
 			strDiffTime = "${dr}년 전"
-		}else if (diffTime >= ONE_MONTH) {
+		} else if (diffTime >= ONE_MONTH) {
 			val dr = (TimeUnit.MILLISECONDS.toDays(diffTime) / 30).toInt()
 			strDiffTime = "${dr}달 전"
 		} else if (diffTime >= ONE_DAY) {

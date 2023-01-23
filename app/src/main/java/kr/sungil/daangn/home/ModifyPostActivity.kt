@@ -4,44 +4,100 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.CalendarContract.CalendarCache.URI
+import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
+import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
+import com.bumptech.glide.Glide
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
+import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
-import kr.sungil.daangn.databinding.ActivityAddPostBinding
+import kr.sungil.daangn.AppConfig
 import kr.sungil.daangn.AppConfig.Companion.AUTH
 import kr.sungil.daangn.AppConfig.Companion.DB_POSTS
+import kr.sungil.daangn.AppConfig.Companion.MYDEBUG
 import kr.sungil.daangn.AppConfig.Companion.STORAGE_IMAGE
 import kr.sungil.daangn.R
+import kr.sungil.daangn.databinding.ActivityModifyPostBinding
 import kr.sungil.daangn.models.PostModel
 
-class AddPostActivity : AppCompatActivity() {
-	private lateinit var binding: ActivityAddPostBinding
+class ModifyPostActivity : AppCompatActivity() {
+	private lateinit var binding: ActivityModifyPostBinding
 	private var selectedUri: Uri? = null
 	private val storage: FirebaseStorage by lazy { Firebase.storage }
 	private val postDB: DatabaseReference by lazy { Firebase.database.reference.child(DB_POSTS) }
+	private var postModel: PostModel? = null
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		binding = ActivityAddPostBinding.inflate(layoutInflater)
+		binding = ActivityModifyPostBinding.inflate(layoutInflater)
 		setContentView(binding.root)
 
+		initIntent()
 		initEditText()
 		initImageUploadButton()
 		initSubmitButton()
 		initCancelButton()
 	}
 
+	private fun initIntent() {
+		if (intent.hasExtra("postModel")) {
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+				postModel = intent.getParcelableExtra("postModel", PostModel::class.java)!!
+			} else {
+				postModel = intent.getParcelableExtra<PostModel>("postModel")!!
+			}
+			if (postModel!!.idx.isNotEmpty()) {
+				postDB.child(postModel!!.idx).get().addOnSuccessListener {
+					val postModel = it.getValue(PostModel::class.java)
+					binding.apply {
+						etTitle.setText(postModel!!.title)
+						etPrice.setText(postModel.price.toString())
+						if (postModel.imageUrl.isNotEmpty()) {
+							Glide.with(ivPhoto.context)
+								.load(postModel.imageUrl)
+								.into(ivPhoto)
+						}
+					}
+				}.addOnFailureListener {
+					Toast.makeText(
+						applicationContext,
+						getString(R.string.there_is_error),
+						Toast.LENGTH_LONG
+					).show()
+					finish()
+				}
+			} else {
+				Toast.makeText(
+					applicationContext,
+					getString(R.string.there_is_error),
+					Toast.LENGTH_LONG
+				).show()
+				finish()
+			}
+		} else {
+			Toast.makeText(
+				applicationContext,
+				getString(R.string.there_is_error),
+				Toast.LENGTH_LONG
+			).show()
+			finish()
+		}
+	}
+
 	private fun initEditText() {
-		// EditText(제목, 가격) 값이 있을 때만 등록 버튼을 활성화 합니다.
 		binding.apply {
 			etTitle.addTextChangedListener {
 				val enable = etTitle.text.trim().isNotEmpty() && etPrice.text.trim().isNotEmpty()
@@ -79,63 +135,57 @@ class AddPostActivity : AppCompatActivity() {
 	}
 
 	private fun initSubmitButton() {
-		// 새 글 등록 버튼 이벤트
 		binding.apply {
-			// 처음에는 버튼을 비활성화 합니다.
-			btSubmit.isEnabled = false
 			btSubmit.setOnClickListener {
-				// 로그인이 되어 있는지 체크합니다
 				if (AUTH.currentUser == null) return@setOnClickListener
+				if (etTitle.text.isEmpty() || etPrice.text.isEmpty()) return@setOnClickListener
+				if (postModel == null) return@setOnClickListener
 
-				val sellerId = AUTH.currentUser?.uid.orEmpty()
+				val idx = postModel!!.idx
+				val sellerId = postModel!!.sellerId
 				val title = etTitle.text.toString().trim()
 				val price = etPrice.text.toString().trim().toInt()
+				val createdAt = postModel!!.createdAt
+				var imageUrl: String = ""
+				if (postModel!!.imageUrl.isNotEmpty()) {
+					imageUrl = postModel!!.imageUrl
+				}
 
 				// Progress 창을 보여줍니다.
 				showProgress()
 
-				// 이미지가 있으면 업로드 과정을 추가합니다.
-				if (selectedUri != null) { // 이미지가 있을 경우
+				// 수정한 이미지가 있으면 업로드 과정을 추가합니다.
+				if (selectedUri != null) { // 수정할 이미지가 있을 경우
 					val imageUri = selectedUri ?: return@setOnClickListener
 					uploadImage(imageUri, successHandler = { uri ->
-						uploadPost(sellerId, title, price, uri)
+						val updatePostModel = PostModel(
+							idx = idx,
+							sellerId = sellerId,
+							title = title,
+							createdAt = createdAt,
+							price = price,
+							imageUrl = uri
+						)
+						uploadPost(updatePostModel)
 					}, errorHandler = {
 						Toast.makeText(
 							applicationContext, getString(R.string.image_upload_fail), Toast.LENGTH_LONG
 						).show()
 						hideProgress()
 					})
-				} else { // 이미지가 없을 경우
-					uploadPost(sellerId, title, price, "")
-					Toast.makeText(
-						applicationContext, getString(R.string.post_submit_ok), Toast.LENGTH_LONG
-					).show()
+				} else { // 수정할 이미지가 없을 경우
+					val updatePostModel = PostModel(
+						idx = idx,
+						sellerId = sellerId,
+						title = title,
+						createdAt = createdAt,
+						price = price,
+						imageUrl = imageUrl
+					)
+					uploadPost(updatePostModel)
 				}
 			}
 		}
-	}
-
-	private fun initCancelButton() {
-		// 취소 버튼 이벤트
-		binding.ivClose.setOnClickListener {
-			finish()
-		}
-	}
-
-	private fun uploadPost(sellerId: String, title: String, price: Int, imageUrl: String) {
-		// PostModel 객체를 생성합니다
-		val createAt = System.currentTimeMillis()
-		val postRef = postDB.push()
-		val postKey = postRef.key ?: ""
-		val postModel = PostModel(postKey, sellerId, title, createAt, price, imageUrl)
-		// Firebase Database 에 저장합니다
-		postRef.setValue(postModel)
-
-		Toast.makeText(
-			applicationContext, getString(R.string.post_submit_ok), Toast.LENGTH_LONG
-		).show()
-		hideProgress()
-		finish()
 	}
 
 	private fun uploadImage(uri: Uri, successHandler: (String) -> Unit, errorHandler: () -> Unit) {
@@ -155,6 +205,20 @@ class AddPostActivity : AppCompatActivity() {
 			} else { // 이미지 업로드 실패
 				errorHandler()
 			}
+		}
+	}
+
+	private fun uploadPost(postModel: PostModel) {
+		postDB.child(postModel.idx).updateChildren(postModel.toMap())
+		Toast.makeText(
+			applicationContext, getString(R.string.post_submit_ok), Toast.LENGTH_LONG
+		).show()
+		finish()
+	}
+
+	private fun initCancelButton() {
+		binding.ivClose.setOnClickListener {
+			finish()
 		}
 	}
 

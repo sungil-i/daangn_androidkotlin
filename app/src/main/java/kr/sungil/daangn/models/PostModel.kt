@@ -1,7 +1,10 @@
 package kr.sungil.daangn.models
 
+import android.os.Parcelable
 import com.google.firebase.database.Exclude
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class PostModel(
 	var idx: String,
 	var sellerId: String,
@@ -9,7 +12,7 @@ data class PostModel(
 	var createdAt: Long,
 	var price: Int,
 	var imageUrl: String
-) {
+) : Parcelable {
 
 	// Firebase 연결을 위해 생성자가 필요합니다.
 	constructor() : this("", "", "", 0, 0, "")
