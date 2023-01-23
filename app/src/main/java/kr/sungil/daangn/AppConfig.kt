@@ -8,6 +8,7 @@ class AppConfig {
 		const val DB_POSTS= "SungilPosts"
 		const val DB_USERS = "SungilUsers"
 		const val DB_CHATS = "SungilChats"
+		const val STORAGE_IMAGE = "SungilPostsImages"
 		const val CHILD_CHAT = "chat"
 		// 설정값
 		const val MYDEBUG = "MY_DEBUG" // Log.d 태그값
