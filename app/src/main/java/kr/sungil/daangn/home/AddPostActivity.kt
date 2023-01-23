@@ -182,7 +182,7 @@ class AddPostActivity : AppCompatActivity() {
 			2020 -> {
 				val uri = data?.data
 				if (uri != null) {
-					// 이미지를 성공적으로 읽었을 경우 이미지 미리보기를 합니다.
+					// 이미지를 성공적으로 읽었을 경우 미리보기를 합니다.
 					binding.ivPhoto.setImageURI(uri)
 					selectedUri = uri
 				} else {

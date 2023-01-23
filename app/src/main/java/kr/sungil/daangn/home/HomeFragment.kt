@@ -18,6 +18,8 @@ import kr.sungil.daangn.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 	private var binding: FragmentHomeBinding? = null
+	private lateinit var postDB: D
+
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		// Fragment 기본함수: Activity 의 onCreate 함수와 동일함
 		super.onViewCreated(view, savedInstanceState)
