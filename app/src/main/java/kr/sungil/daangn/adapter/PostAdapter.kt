@@ -6,11 +6,16 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import kr.sungil.daangn.AppConfig.Companion.ONE_DAY
+import kr.sungil.daangn.AppConfig.Companion.ONE_HOUR
+import kr.sungil.daangn.AppConfig.Companion.ONE_MINUTE
+import kr.sungil.daangn.AppConfig.Companion.ONE_MONTH
 import kr.sungil.daangn.databinding.RvItemPostBinding
 import kr.sungil.daangn.models.PostModel
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class PostAdapter(
 	val onItemClicked: (PostModel) -> Unit
@@ -42,8 +47,7 @@ class PostAdapter(
 
 			binding.apply {
 				tvTitle.text = postModel.title
-				tvDuration.text = diffTime.toString()
-				tvDate.text = getDiffTime(diffTime)
+				tvDuration.text = getDiffTime(diffTime)
 				tvDate.text = dateFormat.format(date).toString()
 				tvPrice.text = priceFormat.format(postModel.price).toString()
 
@@ -61,7 +65,24 @@ class PostAdapter(
 	}
 
 	private fun getDiffTime(diffTime: Long): String {
-		return ""
+		var strDiffTime = ""
+		if (diffTime >= ONE_MONTH) {
+			val dr = (TimeUnit.MICROSECONDS.toDays(diffTime) / 30).toInt()
+			strDiffTime = "${dr}달 전"
+		} else if (diffTime >= ONE_DAY) {
+			val dr = TimeUnit.MICROSECONDS.toDays(diffTime)
+			strDiffTime = "${dr}일 전"
+		} else if (diffTime >= ONE_HOUR) {
+			val dr = TimeUnit.MICROSECONDS.toHours(diffTime)
+			strDiffTime = "${dr}시간 전"
+		} else if (diffTime >= ONE_MINUTE) {
+			val dr = TimeUnit.MICROSECONDS.toMinutes(diffTime)
+			strDiffTime = "${dr}분 전"
+		} else {
+			val dr = TimeUnit.MICROSECONDS.toSeconds(diffTime)
+			strDiffTime = "${dr}초 전"
+		}
+		return strDiffTime
 	}
 
 	// diffUtil
