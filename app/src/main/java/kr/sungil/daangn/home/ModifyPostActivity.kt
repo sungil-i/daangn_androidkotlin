@@ -53,16 +53,19 @@ class ModifyPostActivity : AppCompatActivity() {
 	}
 
 	private fun initIntent() {
-		if (intent.hasExtra("postModel")) {
-			// Android 버전에 따라 PostModel 객체를 Intent 로 받는다.
+		if (intent.hasExtra("idx")) {
+			// PostModel 의 ID를 Intent 로 받는다.
+			val idx = intent.getStringExtra("idx")
+			/*
+			// Android 버전에 따라 PostModel 객체를 Intent 로 받습니다.
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 				postModel = intent.getParcelableExtra("postModel", PostModel::class.java)!!
 			} else {
 				postModel = intent.getParcelableExtra<PostModel>("postModel")!!
-			}
-			if (postModel!!.idx.isNotEmpty()) {
+			}*/
+			if (idx!!.isNotEmpty()) {
 				// Firebase 데이터베이스에서 Post 값을 받는다.
-				postDB.child(postModel!!.idx).get().addOnSuccessListener {
+				postDB.child(idx).get().addOnSuccessListener {
 					val postModel = it.getValue(PostModel::class.java)
 					binding.apply {
 						// 기존 Post 의 데이터를 불러와서 보여준다.

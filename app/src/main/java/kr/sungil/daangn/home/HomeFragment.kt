@@ -108,7 +108,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 				if (it.sellerId == AUTH.currentUser?.uid) { // 내가 올린 글
 					// 내 글 수정하기 창을 띄웁니다.
 					val intent = Intent(context, ModifyPostActivity::class.java)
-					intent.putExtra("postModel", it)
 					intent.putExtra("idx", it.idx)
 					startActivity(intent)
 				} else { // 다른 사람이 올린 글
