@@ -41,12 +41,15 @@ class PostAdapter(
 		private val binding: RvItemPostBinding
 	) : RecyclerView.ViewHolder(binding.root) {
 		fun bind(postModel: PostModel) {
+			// Format 을 지정합니다.
 			val dateFormat = SimpleDateFormat("yyyy. M. d.")
 			val date = Date(postModel.createdAt)
-			val diffTime: Long = System.currentTimeMillis() - postModel.createdAt
 			val priceFormat = NumberFormat.getInstance()
+			// 몇시간 전에 올렸는지를 체크하기 위해 시간차이를 구합니다(단위: 밀리초, 0.001초).
+			val diffTime: Long = System.currentTimeMillis() - postModel.createdAt
 
 			binding.apply {
+				// 리싸이클러뷰에 item 값을 보여줍니다.
 				tvTitle.text = postModel.title
 				tvDuration.text = getDiffTime(diffTime)
 				tvDate.text = "${dateFormat.format(date)}"
@@ -66,6 +69,7 @@ class PostAdapter(
 	}
 
 	private fun getDiffTime(diffTime: Long): String {
+		// 몇시간 전에 올린 글인지를 알기 위해 단위에 따라 계산을 합니다.
 		var strDiffTime = ""
 		if (diffTime >= ONE_YEAR) {
 			val dr = (diffTime / ONE_YEAR).toInt()
@@ -91,6 +95,7 @@ class PostAdapter(
 
 	// diffUtil
 	companion object {
+		// RecyclerView 의 성능을 높여줍니다.
 		val diffUtil = object : DiffUtil.ItemCallback<PostModel>() {
 			override fun areItemsTheSame(oldItem: PostModel, newItem: PostModel): Boolean {
 				return oldItem.idx == newItem.idx

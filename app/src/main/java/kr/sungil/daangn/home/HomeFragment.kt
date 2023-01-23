@@ -83,6 +83,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 	}
 
 	private fun initRecyclerView() {
+		// Firebase 와 RecyclerView 리스트를 연결하기 위한 이벤트
 		listener = object : ChildEventListener {
 			override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
 				val postModel = snapshot.getValue(PostModel::class.java)
@@ -98,8 +99,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 			override fun onCancelled(error: DatabaseError) {}
 		}
 
+		// Firebase 데이터베이스를 연결합니다.
 		postDB.addChildEventListener(listener as ChildEventListener)
 		postList.clear()
+		// RecyclerView 를 연결합니다.
 		adapter = PostAdapter(onItemClicked = {
 			if (AUTH.currentUser != null) { // 로그인을 한 경우
 				if (it.sellerId == AUTH.currentUser?.uid) { // 내가 올린 글
@@ -109,10 +112,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 					intent.putExtra("idx", it.idx)
 					startActivity(intent)
 				} else { // 다른 사람이 올린 글
-					// 글을 보는 창을 띄웁니다.
+					// 채팅창을 띄웁니다.
 					Toast.makeText(
 						context,
-						"다른 사람의 글입니다. 보기창 띄우기",
+						"다른 사람의 글입니다. 채팅창 띄우기",
 						Toast.LENGTH_LONG
 					).show()
 				}
@@ -130,6 +133,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 	override fun onStart() {
 		// 앱이 Reload 했을 때 로그인 인증을 다시 확인한다.
 		super.onStart()
+
+		// Reload 할 때 RecyclerView 를 다시 읽습니다.
 		adapter.notifyDataSetChanged()
 
 		binding!!.apply {
@@ -161,6 +166,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
 	override fun onResume() {
 		super.onResume()
+
 		// Reload 할 때 RecyclerView 를 다시 읽습니다.
 		adapter.notifyDataSetChanged()
 	}

@@ -54,15 +54,18 @@ class ModifyPostActivity : AppCompatActivity() {
 
 	private fun initIntent() {
 		if (intent.hasExtra("postModel")) {
+			// Android 버전에 따라 PostModel 객체를 Intent 로 받는다.
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 				postModel = intent.getParcelableExtra("postModel", PostModel::class.java)!!
 			} else {
 				postModel = intent.getParcelableExtra<PostModel>("postModel")!!
 			}
 			if (postModel!!.idx.isNotEmpty()) {
+				// Firebase 데이터베이스에서 Post 값을 받는다.
 				postDB.child(postModel!!.idx).get().addOnSuccessListener {
 					val postModel = it.getValue(PostModel::class.java)
 					binding.apply {
+						// 기존 Post 의 데이터를 불러와서 보여준다.
 						etTitle.setText(postModel!!.title)
 						etPrice.setText(postModel.price.toString())
 						if (postModel.imageUrl.isNotEmpty()) {
@@ -98,6 +101,7 @@ class ModifyPostActivity : AppCompatActivity() {
 	}
 
 	private fun initEditText() {
+		// EditText 빈값 체크 이벤트
 		binding.apply {
 			etTitle.addTextChangedListener {
 				val enable = etTitle.text.trim().isNotEmpty() && etPrice.text.trim().isNotEmpty()
@@ -137,10 +141,12 @@ class ModifyPostActivity : AppCompatActivity() {
 	private fun initSubmitButton() {
 		binding.apply {
 			btSubmit.setOnClickListener {
+				// 예외처리
 				if (AUTH.currentUser == null) return@setOnClickListener
 				if (etTitle.text.isEmpty() || etPrice.text.isEmpty()) return@setOnClickListener
 				if (postModel == null) return@setOnClickListener
 
+				// 기존에 저장된 값을 미리 저장한다.
 				val idx = postModel!!.idx
 				val sellerId = postModel!!.sellerId
 				val title = etTitle.text.toString().trim()
@@ -164,7 +170,7 @@ class ModifyPostActivity : AppCompatActivity() {
 							title = title,
 							createdAt = createdAt,
 							price = price,
-							imageUrl = uri
+							imageUrl = uri // 수정할 이미지의 새로운 경로
 						)
 						uploadPost(updatePostModel)
 					}, errorHandler = {
@@ -180,7 +186,7 @@ class ModifyPostActivity : AppCompatActivity() {
 						title = title,
 						createdAt = createdAt,
 						price = price,
-						imageUrl = imageUrl
+						imageUrl = imageUrl // 기존 이미지의 경로
 					)
 					uploadPost(updatePostModel)
 				}
