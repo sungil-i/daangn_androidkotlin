@@ -9,16 +9,31 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+import kr.sungil.daangn.AppConfig
 import kr.sungil.daangn.AppConfig.Companion.AUTH
+import kr.sungil.daangn.AppConfig.Companion.DB_POSTS
+import kr.sungil.daangn.AppConfig.Companion.DB_USERS
 import kr.sungil.daangn.AppConfig.Companion.MYDEBUG
 import kr.sungil.daangn.LoginActivity
 import kr.sungil.daangn.LogoutActivity
 import kr.sungil.daangn.R
+import kr.sungil.daangn.adapter.PostAdapter
 import kr.sungil.daangn.databinding.FragmentHomeBinding
+import kr.sungil.daangn.models.PostModel
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 	private var binding: FragmentHomeBinding? = null
-	private lateinit var postDB: D
+	private val postDB: DatabaseReference by lazy { Firebase.database.reference.child(DB_POSTS) }
+	private val userDB: DatabaseReference by lazy { Firebase.database.reference.child(DB_USERS) }
+	private lateinit var adapter: PostAdapter
+	private lateinit var listener: Any
+	private val postList = mutableListOf<PostModel>()
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		// Fragment 기본함수: Activity 의 onCreate 함수와 동일함
@@ -28,6 +43,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
 		initLogInOutButton()
 		initFloatingActionButton()
+		initRecyclerView()
 	}
 
 	private fun initLogInOutButton() {
@@ -66,6 +82,53 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 		}
 	}
 
+	private fun initRecyclerView() {
+		listener = object : ChildEventListener {
+			override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+				val postModel = snapshot.getValue(PostModel::class.java)
+				postModel ?: return
+
+				postList.add(postModel)
+				adapter.submitList(postList)
+			}
+
+			override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
+			override fun onChildRemoved(snapshot: DataSnapshot) {}
+			override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
+			override fun onCancelled(error: DatabaseError) {}
+		}
+
+		postDB.addChildEventListener(listener as ChildEventListener)
+		postList.clear()
+		adapter = PostAdapter(onItemClicked = {
+			if (AUTH.currentUser != null) { // 로그인을 한 경우
+				if (it.sellerId == AUTH.currentUser?.uid) { // 내가 올린 글
+					// 내 글 수정하기 창을 띄웁니다.
+					//todo modify my post
+					Toast.makeText(
+						context,
+						"나의 글입니다. 수정창 띄우기",
+						Toast.LENGTH_LONG
+					).show()
+				} else { // 다른 사람이 올린 글
+					// 글을 보는 창을 띄웁니다.
+					Toast.makeText(
+						context,
+						"다른 사람의 글입니다. 보기창 띄우기",
+						Toast.LENGTH_LONG
+					).show()
+				}
+			} else { // 로그인을 하지 않은 경우
+				Toast.makeText(
+					context,
+					getString(R.string.check_login),
+					Toast.LENGTH_LONG
+				).show()
+			}
+		})
+		binding?.rvPosts?.adapter = adapter
+	}
+
 	override fun onStart() {
 		// 앱이 Reload 했을 때 로그인 인증을 다시 확인한다.
 		super.onStart()
@@ -95,5 +158,17 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 				ivLogout.isVisible = true
 			}
 		}
+	}
+
+	override fun onResume() {
+		super.onResume()
+		// Reload 할 때 RecyclerView 를 다시 읽습니다.
+		adapter.notifyDataSetChanged()
+	}
+
+	override fun onDestroyView() {
+		super.onDestroyView()
+		// 창을 닫을 때 Firebase 연결을 삭제합니다
+		postDB.removeEventListener(listener as ChildEventListener)
 	}
 }

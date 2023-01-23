@@ -124,7 +124,9 @@ class AddPostActivity : AppCompatActivity() {
 
 	private fun uploadPost(sellerId: String, title: String, price: Int, imageUrl: String) {
 		// PostModel 객체를 생성합니다
-		val postModel = PostModel(sellerId, title, System.currentTimeMillis(), price, imageUrl)
+		val createAt = System.currentTimeMillis()
+		val idx = "$createAt-$sellerId"
+		val postModel = PostModel(idx, sellerId, title, createAt, price, imageUrl)
 		// Firebase Database 에 저장합니다
 		postDB.push().setValue(postModel)
 
