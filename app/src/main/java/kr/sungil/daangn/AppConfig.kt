@@ -21,5 +21,6 @@ class AppConfig {
 		const val ONE_HOUR: Long = ONE_MINUTE * 60
 		const val ONE_DAY: Long = ONE_HOUR * 24
 		const val ONE_MONTH: Long = ONE_DAY * 30
+		const val ONE_YEAR: Long = 31557600000
 	}
 }

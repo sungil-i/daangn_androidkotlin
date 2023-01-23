@@ -10,6 +10,7 @@ import kr.sungil.daangn.AppConfig.Companion.ONE_DAY
 import kr.sungil.daangn.AppConfig.Companion.ONE_HOUR
 import kr.sungil.daangn.AppConfig.Companion.ONE_MINUTE
 import kr.sungil.daangn.AppConfig.Companion.ONE_MONTH
+import kr.sungil.daangn.AppConfig.Companion.ONE_YEAR
 import kr.sungil.daangn.databinding.RvItemPostBinding
 import kr.sungil.daangn.models.PostModel
 import java.text.NumberFormat
@@ -66,7 +67,10 @@ class PostAdapter(
 
 	private fun getDiffTime(diffTime: Long): String {
 		var strDiffTime = ""
-		if (diffTime >= ONE_MONTH) {
+		if(diffTime >= ONE_YEAR) {
+			val dr = (diffTime / ONE_YEAR).toInt()
+			strDiffTime = "${dr}년 전"
+		}else if (diffTime >= ONE_MONTH) {
 			val dr = (TimeUnit.MILLISECONDS.toDays(diffTime) / 30).toInt()
 			strDiffTime = "${dr}달 전"
 		} else if (diffTime >= ONE_DAY) {
