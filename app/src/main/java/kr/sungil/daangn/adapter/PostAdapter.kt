@@ -42,7 +42,7 @@ class PostAdapter(
 		fun bind(postModel: PostModel) {
 			val dateFormat = SimpleDateFormat("yyyy. M. d.")
 			val date = Date(postModel.createdAt)
-			val diffTime = System.currentTimeMillis() - postModel.createdAt
+			val diffTime: Long = System.currentTimeMillis() - postModel.createdAt
 			val priceFormat = NumberFormat.getInstance()
 
 			binding.apply {
@@ -67,19 +67,19 @@ class PostAdapter(
 	private fun getDiffTime(diffTime: Long): String {
 		var strDiffTime = ""
 		if (diffTime >= ONE_MONTH) {
-			val dr = (TimeUnit.MICROSECONDS.toDays(diffTime) / 30).toInt()
+			val dr = (TimeUnit.MILLISECONDS.toDays(diffTime) / 30).toInt()
 			strDiffTime = "${dr}달 전"
 		} else if (diffTime >= ONE_DAY) {
-			val dr = TimeUnit.MICROSECONDS.toDays(diffTime)
+			val dr = TimeUnit.MILLISECONDS.toDays(diffTime)
 			strDiffTime = "${dr}일 전"
 		} else if (diffTime >= ONE_HOUR) {
-			val dr = TimeUnit.MICROSECONDS.toHours(diffTime)
+			val dr = TimeUnit.MILLISECONDS.toHours(diffTime)
 			strDiffTime = "${dr}시간 전"
 		} else if (diffTime >= ONE_MINUTE) {
-			val dr = TimeUnit.MICROSECONDS.toMinutes(diffTime)
+			val dr = TimeUnit.MILLISECONDS.toMinutes(diffTime)
 			strDiffTime = "${dr}분 전"
 		} else {
-			val dr = TimeUnit.MICROSECONDS.toSeconds(diffTime)
+			val dr = TimeUnit.MILLISECONDS.toSeconds(diffTime)
 			strDiffTime = "${dr}초 전"
 		}
 		return strDiffTime

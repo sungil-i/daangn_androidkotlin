@@ -16,9 +16,10 @@ class AppConfig {
 		lateinit var AUTH: FirebaseAuth // Firebase 인증 정보
 
 		// 시간 DiffTime
-		const val ONE_MINUTE = 60 * 1000
-		const val ONE_HOUR = ONE_MINUTE * 60
-		const val ONE_DAY = ONE_HOUR * 24
-		const val ONE_MONTH = ONE_DAY * 30
+		const val ONE_SECOND: Long = 1000
+		const val ONE_MINUTE: Long = ONE_SECOND * 60
+		const val ONE_HOUR: Long = ONE_MINUTE * 60
+		const val ONE_DAY: Long = ONE_HOUR * 24
+		const val ONE_MONTH: Long = ONE_DAY * 30
 	}
 }
