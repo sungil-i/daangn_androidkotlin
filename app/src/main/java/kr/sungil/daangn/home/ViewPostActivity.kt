@@ -29,6 +29,7 @@ class ViewPostActivity : AppCompatActivity() {
 		binding = ActivityViewPostBinding.inflate(layoutInflater)
 		setContentView(binding.root)
 
+		// Intent 를 가져옵니다. 예외처리
 		if (intent.hasExtra("idx").not()) finish()
 		val idx = intent.getStringExtra("idx") ?: ""
 		if (idx.isEmpty()) finish()
@@ -47,6 +48,7 @@ class ViewPostActivity : AppCompatActivity() {
 			)
 //			Log.d(MYDEBUG, "onCreate: $postModel")
 			userDB.child(postModel.sellerId).get().addOnSuccessListener { user ->
+				// Firebase 에서 판매자 UserModel 을 가져옵니다.
 				val _seller = user.getValue(UserModel::class.java)!!
 				seller = UserModel(
 					idx = _seller.idx,
@@ -66,18 +68,19 @@ class ViewPostActivity : AppCompatActivity() {
 	}
 
 	private fun initViews() {
+		// 상세 정보 보기 창의 View 를 초기화 합니다.
 		binding.apply {
 			val priceFormat = NumberFormat.getInstance()
 
-			tvTitle.text = postModel!!.title
-			tvPrice.text = "${priceFormat.format(postModel!!.price)}원"
-			tvEmail.text = seller!!.email
-			tvNickname.text = seller!!.nickname
-			tvDetail.text = postModel!!.detail
+			tvTitle.text = postModel.title
+			tvPrice.text = "${priceFormat.format(postModel.price)}원"
+			tvEmail.text = seller.email
+			tvNickname.text = seller.nickname
+			tvDetail.text = postModel.detail
 
 			if (postModel!!.imageUrl.isNotEmpty()) {
 				Glide.with(ivPhoto.context)
-					.load(postModel!!.imageUrl)
+					.load(postModel.imageUrl)
 					.into(ivPhoto)
 			}
 		}
