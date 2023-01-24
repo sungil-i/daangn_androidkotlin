@@ -65,21 +65,27 @@
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/et_title" />
 
-	<Button
-		android:id="@+id/bt_upload_image"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="20dp"
-		android:backgroundTint="@color/dark_gray"
-		android:text="이미지 선택" />
-
 	<ImageView
 		android:id="@+id/iv_photo"
 		android:layout_width="100dp"
 		android:layout_height="100dp"
 		android:background="@color/gray_ec"
-		app:layout_constraintStart_toStartOf="@+id/et_price"
+		android:layout_marginTop="20dp"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toStartOf="@+id/bt_upload_image"
 		app:layout_constraintTop_toBottomOf="@+id/et_price" />
+
+	<Button
+		android:id="@+id/bt_upload_image"
+		android:layout_width="wrap_content"
+		android:layout_height="100dp"
+		app:layout_constraintStart_toEndOf="@+id/iv_photo"
+		app:layout_constraintTop_toTopOf="@+id/iv_photo"
+		app:layout_constraintBottom_toBottomOf="@+id/iv_photo"
+		app:layout_constraintEnd_toEndOf="parent"
+		android:backgroundTint="@color/dark_gray"
+		android:text="이미지 선택" />
+
 
 	<Button
 		android:id="@+id/bt_submit"
