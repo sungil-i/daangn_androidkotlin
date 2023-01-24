@@ -115,7 +115,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 					// 채팅창을 띄웁니다.
 					Toast.makeText(
 						context,
-						"다른 사람의 글입니다. 채팅창 띄우기",
+						"다른 사람의 글입니다. 상세정보 창 띄우기",
 						Toast.LENGTH_LONG
 					).show()
 				}

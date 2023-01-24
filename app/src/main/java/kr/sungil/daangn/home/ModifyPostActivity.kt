@@ -101,14 +101,24 @@ class ModifyPostActivity : AppCompatActivity() {
 	}
 
 	private fun initEditText() {
-		// EditText 빈값 체크 이벤트
+		// EditText(제목, 가격) 값이 있을 때만 등록 버튼을 활성화 합니다.
 		binding.apply {
 			etTitle.addTextChangedListener {
-				val enable = etTitle.text.trim().isNotEmpty() && etPrice.text.trim().isNotEmpty()
+				val enable = etTitle.text.trim().isNotEmpty()
+						&& etPrice.text.trim().isNotEmpty()
+						&& etDetail.text.trim().isNotEmpty()
 				btSubmit.isEnabled = enable
 			}
 			etPrice.addTextChangedListener {
-				val enable = etTitle.text.trim().isNotEmpty() && etPrice.text.trim().isNotEmpty()
+				val enable = etTitle.text.trim().isNotEmpty()
+						&& etPrice.text.trim().isNotEmpty()
+						&& etDetail.text.trim().isNotEmpty()
+				btSubmit.isEnabled = enable
+			}
+			etDetail.addTextChangedListener {
+				val enable = etTitle.text.trim().isNotEmpty()
+						&& etPrice.text.trim().isNotEmpty()
+						&& etDetail.text.trim().isNotEmpty()
 				btSubmit.isEnabled = enable
 			}
 		}
@@ -153,6 +163,7 @@ class ModifyPostActivity : AppCompatActivity() {
 				val price = etPrice.text.toString().trim().toInt()
 				val createdAt = postModel!!.createdAt
 				var imageUrl: String = ""
+				val detail = etDetail.text.toString().trim()
 				if (postModel!!.imageUrl.isNotEmpty()) {
 					imageUrl = postModel!!.imageUrl
 				}
@@ -170,7 +181,8 @@ class ModifyPostActivity : AppCompatActivity() {
 							title = title,
 							createdAt = createdAt,
 							price = price,
-							imageUrl = uri // 수정할 이미지의 새로운 경로
+							imageUrl = uri, // 수정할 이미지의 새로운 경로
+							detail = detail
 						)
 						uploadPost(updatePostModel)
 					}, errorHandler = {
@@ -186,7 +198,8 @@ class ModifyPostActivity : AppCompatActivity() {
 						title = title,
 						createdAt = createdAt,
 						price = price,
-						imageUrl = imageUrl // 기존 이미지의 경로
+						imageUrl = imageUrl, // 기존 이미지의 경로
+						detail = detail
 					)
 					uploadPost(updatePostModel)
 				}

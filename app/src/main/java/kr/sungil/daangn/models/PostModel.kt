@@ -11,11 +11,12 @@ data class PostModel(
 	var title: String,
 	var createdAt: Long,
 	var price: Int,
-	var imageUrl: String
+	var imageUrl: String,
+	var detail: String
 ) : Parcelable {
 
 	// Firebase 연결을 위해 생성자가 필요합니다.
-	constructor() : this("", "", "", 0, 0, "")
+	constructor() : this("", "", "", 0, 0, "", "")
 
 	// 데이터 수정 Update 를 위해 Json 형태의 Map 으로 변환합니다.
 	@Exclude
@@ -26,7 +27,8 @@ data class PostModel(
 			"title" to title,
 			"createdAt" to createdAt,
 			"price" to price,
-			"imageUrl" to imageUrl
+			"imageUrl" to imageUrl,
+			"detail" to detail
 		)
 	}
 }

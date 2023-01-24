@@ -44,11 +44,21 @@ class AddPostActivity : AppCompatActivity() {
 		// EditText(제목, 가격) 값이 있을 때만 등록 버튼을 활성화 합니다.
 		binding.apply {
 			etTitle.addTextChangedListener {
-				val enable = etTitle.text.trim().isNotEmpty() && etPrice.text.trim().isNotEmpty()
+				val enable = etTitle.text.trim().isNotEmpty()
+						&& etPrice.text.trim().isNotEmpty()
+						&& etDetail.text.trim().isNotEmpty()
 				btSubmit.isEnabled = enable
 			}
 			etPrice.addTextChangedListener {
-				val enable = etTitle.text.trim().isNotEmpty() && etPrice.text.trim().isNotEmpty()
+				val enable = etTitle.text.trim().isNotEmpty()
+						&& etPrice.text.trim().isNotEmpty()
+						&& etDetail.text.trim().isNotEmpty()
+				btSubmit.isEnabled = enable
+			}
+			etDetail.addTextChangedListener {
+				val enable = etTitle.text.trim().isNotEmpty()
+						&& etPrice.text.trim().isNotEmpty()
+						&& etDetail.text.trim().isNotEmpty()
 				btSubmit.isEnabled = enable
 			}
 		}
@@ -90,6 +100,7 @@ class AddPostActivity : AppCompatActivity() {
 				val sellerId = AUTH.currentUser?.uid.orEmpty()
 				val title = etTitle.text.toString().trim()
 				val price = etPrice.text.toString().trim().toInt()
+				val detail = etDetail.text.toString().trim()
 
 				// Progress 창을 보여줍니다.
 				showProgress()
@@ -98,7 +109,7 @@ class AddPostActivity : AppCompatActivity() {
 				if (selectedUri != null) { // 이미지가 있을 경우
 					val imageUri = selectedUri ?: return@setOnClickListener
 					uploadImage(imageUri, successHandler = { uri ->
-						uploadPost(sellerId, title, price, uri)
+						uploadPost(sellerId, title, price, uri, detail)
 					}, errorHandler = {
 						Toast.makeText(
 							applicationContext, getString(R.string.image_upload_fail), Toast.LENGTH_LONG
@@ -106,7 +117,7 @@ class AddPostActivity : AppCompatActivity() {
 						hideProgress()
 					})
 				} else { // 이미지가 없을 경우
-					uploadPost(sellerId, title, price, "")
+					uploadPost(sellerId, title, price, "", detail)
 					Toast.makeText(
 						applicationContext, getString(R.string.post_submit_ok), Toast.LENGTH_LONG
 					).show()
@@ -122,12 +133,18 @@ class AddPostActivity : AppCompatActivity() {
 		}
 	}
 
-	private fun uploadPost(sellerId: String, title: String, price: Int, imageUrl: String) {
+	private fun uploadPost(
+		sellerId: String,
+		title: String,
+		price: Int,
+		imageUrl: String,
+		detail: String
+	) {
 		// PostModel 객체를 생성합니다
 		val createAt = System.currentTimeMillis()
 		val postRef = postDB.push()
 		val postKey = postRef.key ?: ""
-		val postModel = PostModel(postKey, sellerId, title, createAt, price, imageUrl)
+		val postModel = PostModel(postKey, sellerId, title, createAt, price, imageUrl, detail)
 		// Firebase Database 에 저장합니다
 		postRef.setValue(postModel)
 
