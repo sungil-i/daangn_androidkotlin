@@ -74,7 +74,8 @@ class LoginActivity : AppCompatActivity() {
 						if (task.isSuccessful) { // 회원가입 성공
 							// Firebase Database 에 UserModel 객체를 저장합니다.
 							val userModel = UserModel(
-								email = AUTH.currentUser!!.email,
+								idx = AUTH.currentUser!!.uid,
+								email = AUTH.currentUser!!.email!!,
 								name = "",
 								nickname = ""
 							)

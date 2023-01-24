@@ -41,7 +41,77 @@
 	</androidx.constraintlayout.widget.ConstraintLayout>
 	<!--Appbar 마지막-->
 
-	
+	<androidx.cardview.widget.CardView
+		android:id="@+id/cv_post"
+		android:layout_width="match_parent"
+		android:layout_height="80dp"
+		android:layout_marginStart="20dp"
+		android:layout_marginTop="10dp"
+		android:layout_marginEnd="20dp"
+		app:cardCornerRadius="10dp"
+		app:cardElevation="10dp"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/cl_appbar">
+
+		<androidx.constraintlayout.widget.ConstraintLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent">
+
+			<androidx.constraintlayout.utils.widget.ImageFilterView
+				android:id="@+id/iv_cv_photo"
+				android:layout_width="60dp"
+				android:layout_height="60dp"
+				android:layout_marginStart="10dp"
+				app:layout_constraintBottom_toBottomOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toTopOf="parent"
+				tools:src="@drawable/ic_launcher_background" />
+
+			<TextView
+				android:id="@+id/tv_cv_title"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="15dp"
+				android:layout_marginEnd="15dp"
+				android:ellipsize="end"
+				android:singleLine="true"
+				android:textSize="18sp"
+				android:textStyle="bold"
+				app:layout_constraintBottom_toBottomOf="parent"
+				app:layout_constraintEnd_toStartOf="@+id/tv_cv_price"
+				app:layout_constraintStart_toEndOf="@+id/iv_cv_photo"
+				app:layout_constraintTop_toTopOf="parent"
+				tools:text="제목aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" />
+
+			<TextView
+				android:id="@+id/tv_cv_price"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginEnd="10dp"
+				android:textSize="18sp"
+				app:layout_constraintBottom_toBottomOf="parent"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintTop_toTopOf="parent"
+				tools:text="22,000원" />
+
+		</androidx.constraintlayout.widget.ConstraintLayout>
+	</androidx.cardview.widget.CardView>
+
+	<androidx.recyclerview.widget.RecyclerView
+		android:id="@+id/rv_chats"
+		android:layout_width="0dp"
+		app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+		android:orientation="vertical"
+		android:layout_height="0dp"
+		android:layout_marginStart="10dp"
+		android:layout_marginTop="10dp"
+		android:layout_marginEnd="10dp"
+		app:layout_constraintBottom_toTopOf="@+id/et_message"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/cv_post"
+		tools:listitem="@layout/rv_item_left_biased_chat" />
 
 	<EditText
 		android:id="@+id/et_message"
@@ -56,8 +126,8 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:backgroundTint="@color/orange"
-		android:textSize="16sp"
 		android:text="전송"
+		android:textSize="16sp"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent" />
 

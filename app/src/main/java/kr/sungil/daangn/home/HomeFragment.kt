@@ -91,6 +91,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
 				postList.add(postModel)
 				adapter.submitList(postList)
+				adapter.notifyDataSetChanged()
 			}
 
 			override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
@@ -112,11 +113,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 					startActivity(intent)
 				} else { // 다른 사람이 올린 글
 					// 채팅창을 띄웁니다.
-					Toast.makeText(
-						context,
-						"다른 사람의 글입니다. 채팅창 띄우기",
-						Toast.LENGTH_LONG
-					).show()
+					val intent = Intent(context, ChatActivity::class.java)
+					intent.putExtra("idx", it.idx)
+					startActivity(intent)
 				}
 			} else { // 로그인을 하지 않은 경우
 				Toast.makeText(

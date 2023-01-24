@@ -85,6 +85,11 @@ class AddPostActivity : AppCompatActivity() {
 			btSubmit.isEnabled = false
 			btSubmit.setOnClickListener {
 				// 로그인이 되어 있는지 체크합니다
+				Toast.makeText(
+					applicationContext,
+					getString(R.string.check_login),
+					Toast.LENGTH_LONG
+				).show()
 				if (AUTH.currentUser == null) return@setOnClickListener
 
 				val sellerId = AUTH.currentUser?.uid.orEmpty()
@@ -223,6 +228,13 @@ class AddPostActivity : AppCompatActivity() {
 		super.onStart()
 
 		// 로그인이 되어 있는지 체크합니다
-		if (AUTH.currentUser == null) finish()
+		if (AUTH.currentUser == null) {
+			Toast.makeText(
+				applicationContext,
+				getString(R.string.check_login),
+				Toast.LENGTH_LONG
+			).show()
+			finish()
+		}
 	}
 }
