@@ -13,7 +13,7 @@ data class PostModel(
 	var price: Int,
 	var imageUrl: String,
 	var detail: String
-) : Parcelable {
+) : Parcelable, Cloneable {
 
 	// Firebase 연결을 위해 생성자가 필요합니다.
 	constructor() : this("", "", "", 0, 0, "", "")
@@ -31,4 +31,7 @@ data class PostModel(
 			"detail" to detail
 		)
 	}
+
+	// 객체 깊은 복사
+	override fun clone(): PostModel = super.clone() as PostModel
 }

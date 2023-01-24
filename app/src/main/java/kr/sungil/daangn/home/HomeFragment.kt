@@ -108,16 +108,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 				if (it.sellerId == AUTH.currentUser?.uid) { // 내가 올린 글
 					// 내 글 수정하기 창을 띄웁니다.
 					val intent = Intent(context, ModifyPostActivity::class.java)
-					intent.putExtra("postModel", it)
 					intent.putExtra("idx", it.idx)
+					intent.putExtra("postModel", it)
 					startActivity(intent)
 				} else { // 다른 사람이 올린 글
-					// 채팅창을 띄웁니다.
-					Toast.makeText(
-						context,
-						"다른 사람의 글입니다. 상세정보 창 띄우기",
-						Toast.LENGTH_LONG
-					).show()
+					// 상세정보 창을 띄웁니다.
+					val intent = Intent(context, ViewPostActivity::class.java)
+					intent.putExtra("idx", it.idx)
+					startActivity(intent)
 				}
 			} else { // 로그인을 하지 않은 경우
 				Toast.makeText(

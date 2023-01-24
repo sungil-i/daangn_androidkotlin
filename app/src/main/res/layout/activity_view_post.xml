@@ -41,54 +41,101 @@
 	</androidx.constraintlayout.widget.ConstraintLayout>
 	<!--Appbar 마지막-->
 
-	<TextView
-		android:id="@+id/tv_title"
+	<ScrollView
 		android:layout_width="0dp"
-		android:layout_height="wrap_content"
-		android:layout_margin="20dp"
-		android:textColor="@color/black"
-		android:textSize="20sp"
-		android:textStyle="bold"
+		android:layout_height="0dp"
+		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/cl_appbar"
-		tools:text="네모싹싹 물걸레 탈수" />
+		app:layout_constraintTop_toBottomOf="@+id/cl_appbar">
 
-	<TextView
-		android:id="@+id/tv_price"
-		android:layout_width="0dp"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="10dp"
-		android:textColor="@color/dark_gray"
-		android:textSize="20sp"
-		android:textStyle="bold"
-		app:layout_constraintEnd_toEndOf="@+id/tv_title"
-		app:layout_constraintStart_toStartOf="@+id/tv_title"
-		app:layout_constraintTop_toBottomOf="@+id/tv_title"
-		tools:text="50,000원" />
+		<androidx.constraintlayout.widget.ConstraintLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
 
-	<ImageView
-		android:id="@+id/iv_photo"
-		android:layout_width="100dp"
-		android:layout_height="100dp"
-		android:layout_marginTop="20dp"
-		android:background="@color/gray_ec"
-		android:scaleType="centerCrop"
-		app:layout_constraintStart_toStartOf="@+id/tv_title"
-		app:layout_constraintTop_toBottomOf="@+id/tv_price"
-		tools:src="@drawable/ic_launcher_background" />
+			<TextView
+				android:id="@+id/tv_title"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_margin="20dp"
+				android:textColor="@color/black"
+				android:textSize="20sp"
+				android:textStyle="bold"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toTopOf="parent"
+				tools:text="네모싹싹 물걸레 탈수" />
 
-	<TextView
-		android:id="@+id/tv_detail"
-		android:layout_width="0dp"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="10dp"
-		android:gravity="top|start"
-		android:padding="10dp"
-		android:scrollbars="vertical"
-		app:layout_constraintEnd_toEndOf="@+id/tv_title"
-		app:layout_constraintStart_toStartOf="@+id/tv_title"
-		app:layout_constraintTop_toBottomOf="@+id/iv_photo"
-		tools:text="상세 글 올리기\naaaaaaaaaaaaaa\nbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbdadsfadsasdfasdfasdfasdfasdfasfd\nasdfasdfasdfasdfasdfasdf" />
+			<TextView
+				android:id="@+id/tv_price"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="10dp"
+				android:textColor="@color/black"
+				android:textSize="20sp"
+				android:textStyle="bold"
+				app:layout_constraintStart_toStartOf="@+id/tv_title"
+				app:layout_constraintTop_toBottomOf="@+id/tv_title"
+				tools:text="50,000원" />
+
+			<TextView
+				android:id="@+id/tv_email"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textColor="@color/dark_gray"
+				android:textSize="14sp"
+				app:layout_constraintEnd_toEndOf="@+id/tv_title"
+				app:layout_constraintTop_toTopOf="@+id/tv_price"
+				tools:text="이메일" />
+
+			<TextView
+				android:id="@+id/tv_nickname"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginEnd="10dp"
+				android:textColor="@color/dark_gray"
+				android:textSize="16sp"
+				android:textStyle="bold"
+				app:layout_constraintEnd_toStartOf="@+id/tv_email"
+				app:layout_constraintTop_toTopOf="@+id/tv_price"
+				tools:text="닉네임" />
+
+			<ImageView
+				android:layout_width="25dp"
+				android:layout_height="25dp"
+				android:src="@drawable/menu_mypage"
+				android:layout_marginEnd="5dp"
+				app:layout_constraintTop_toTopOf="@id/tv_price"
+				app:layout_constraintEnd_toStartOf="@+id/tv_nickname"
+				app:tint="@color/gray_cc"/>
+
+			<ImageView
+				android:id="@+id/iv_photo"
+				android:layout_width="100dp"
+				android:layout_height="100dp"
+				android:layout_marginTop="20dp"
+				android:background="@color/gray_ec"
+				android:scaleType="centerCrop"
+				app:layout_constraintStart_toStartOf="@+id/tv_title"
+				app:layout_constraintTop_toBottomOf="@+id/tv_price"
+				tools:src="@drawable/ic_launcher_background" />
+
+			<TextView
+				android:id="@+id/tv_detail"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="10dp"
+				android:layout_marginBottom="50dp"
+				android:gravity="top|start"
+				android:padding="10dp"
+				android:scrollbars="vertical"
+				app:layout_constraintEnd_toEndOf="@+id/tv_title"
+				app:layout_constraintStart_toStartOf="@+id/tv_title"
+				app:layout_constraintTop_toBottomOf="@+id/iv_photo"
+				tools:text="상세 글 올리기\naaaaaaaaaaaaaa\nbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbdadsfadsasdfasdfasdfasdfasdfasfd\nasdfasdfasdfasdfasdfasdf" />
+
+		</androidx.constraintlayout.widget.ConstraintLayout>
+
+	</ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

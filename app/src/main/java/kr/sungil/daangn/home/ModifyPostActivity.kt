@@ -68,6 +68,7 @@ class ModifyPostActivity : AppCompatActivity() {
 						// 기존 Post 의 데이터를 불러와서 보여준다.
 						etTitle.setText(postModel!!.title)
 						etPrice.setText(postModel.price.toString())
+						etDetail.setText(postModel.detail)
 						if (postModel.imageUrl.isNotEmpty()) {
 							Glide.with(ivPhoto.context)
 								.load(postModel.imageUrl)

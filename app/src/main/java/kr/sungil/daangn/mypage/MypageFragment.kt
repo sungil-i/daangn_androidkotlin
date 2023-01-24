@@ -81,6 +81,7 @@ class MypageFragment : Fragment(R.layout.fragment_mypage) {
 					val nickname = etInfoNickname.text.toString().trim()
 					val name = etInfoName.text.toString().trim()
 					val userModel = UserModel(
+						idx = AUTH.currentUser!!.uid,
 						email = AUTH.currentUser!!.email,
 						name = name,
 						nickname = nickname,
