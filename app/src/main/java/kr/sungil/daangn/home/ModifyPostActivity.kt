@@ -60,16 +60,16 @@ class ModifyPostActivity : AppCompatActivity() {
 			} else {
 				postModel = intent.getParcelableExtra<PostModel>("postModel")!!
 			}
-			if (postModel!!.idx.isNotEmpty()) {
+			if (postModel!!.idx!!.isNotEmpty()) {
 				// Firebase 데이터베이스에서 Post 값을 받는다.
-				postDB.child(postModel!!.idx).get().addOnSuccessListener {
+				postDB.child(postModel!!.idx!!).get().addOnSuccessListener {
 					val postModel = it.getValue(PostModel::class.java)
 					binding.apply {
 						// 기존 Post 의 데이터를 불러와서 보여준다.
 						etTitle.setText(postModel!!.title)
 						etPrice.setText(postModel.price.toString())
 						etDetail.setText(postModel.detail)
-						if (postModel.imageUrl.isNotEmpty()) {
+						if (postModel.imageUrl!!.isNotEmpty()) {
 							Glide.with(ivPhoto.context)
 								.load(postModel.imageUrl)
 								.into(ivPhoto)
@@ -165,8 +165,8 @@ class ModifyPostActivity : AppCompatActivity() {
 				val createdAt = postModel!!.createdAt
 				var imageUrl: String = ""
 				val detail = etDetail.text.toString().trim()
-				if (postModel!!.imageUrl.isNotEmpty()) {
-					imageUrl = postModel!!.imageUrl
+				if (postModel!!.imageUrl!!.isNotEmpty()) {
+					imageUrl = postModel!!.imageUrl!!
 				}
 
 				// Progress 창을 보여줍니다.
@@ -229,7 +229,7 @@ class ModifyPostActivity : AppCompatActivity() {
 	}
 
 	private fun uploadPost(postModel: PostModel) {
-		postDB.child(postModel.idx).updateChildren(postModel.toMap())
+		postDB.child(postModel.idx!!).updateChildren(postModel.toMap())
 		Toast.makeText(
 			applicationContext, getString(R.string.post_submit_ok), Toast.LENGTH_LONG
 		).show()

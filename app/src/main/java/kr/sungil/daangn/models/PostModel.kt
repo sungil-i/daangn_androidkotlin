@@ -6,13 +6,13 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class PostModel(
-	var idx: String,
-	var sellerId: String,
-	var title: String,
-	var createdAt: Long,
-	var price: Int,
-	var imageUrl: String,
-	var detail: String
+	var idx: String?,
+	var sellerId: String?,
+	var title: String?,
+	var createdAt: Long?,
+	var price: Int?,
+	var imageUrl: String?,
+	var detail: String?
 ) : Parcelable, Cloneable {
 
 	// Firebase 연결을 위해 생성자가 필요합니다.

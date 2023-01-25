@@ -3,6 +3,7 @@ package kr.sungil.daangn.home
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.bumptech.glide.Glide
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
@@ -12,6 +13,7 @@ import kr.sungil.daangn.AppConfig.Companion.CHILD_CHAT
 import kr.sungil.daangn.AppConfig.Companion.DB_CHATS
 import kr.sungil.daangn.AppConfig.Companion.DB_POSTS
 import kr.sungil.daangn.AppConfig.Companion.DB_USERS
+import kr.sungil.daangn.AppConfig.Companion.MYDEBUG
 import kr.sungil.daangn.chat.ChatActivity
 import kr.sungil.daangn.databinding.ActivityViewPostBinding
 import kr.sungil.daangn.models.ChatRoomModel
@@ -26,6 +28,9 @@ class ViewPostActivity : AppCompatActivity() {
 	private val chatDB: DatabaseReference by lazy { Firebase.database.reference.child(DB_CHATS) }
 	private lateinit var postModel: PostModel
 	private lateinit var seller: UserModel
+	private var postId = ""
+	private var sellerId = ""
+	private var chatRoomId = ""
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -39,7 +44,8 @@ class ViewPostActivity : AppCompatActivity() {
 
 		// Firebase 에서 PostModel 을 가져옵니다.
 		postDB.child(idx).get().addOnSuccessListener { post ->
-			val _postModel = post.getValue(PostModel::class.java)!! as PostModel
+			val _postModel = post.getValue(PostModel::class.java)!!
+			postId = _postModel.idx!!
 			postModel = PostModel(
 				idx = _postModel.idx,
 				sellerId = _postModel.sellerId,
@@ -50,7 +56,7 @@ class ViewPostActivity : AppCompatActivity() {
 				detail = _postModel.detail
 			)
 //			Log.d(MYDEBUG, "onCreate: $postModel")
-			userDB.child(postModel.sellerId).get().addOnSuccessListener { user ->
+			userDB.child(_postModel.sellerId!!).get().addOnSuccessListener { user ->
 				// Firebase 에서 판매자 UserModel 을 가져옵니다.
 				val _seller = user.getValue(UserModel::class.java)!!
 				seller = UserModel(
@@ -63,28 +69,42 @@ class ViewPostActivity : AppCompatActivity() {
 
 				// 채팅방을 만들고 seller, buyer 모두 접속할 수 있게 합니다.
 				val myId = AUTH.currentUser!!.uid
-				val sellerId = seller.idx
-				val postId = postModel.idx
-				val chatRoomRef = chatDB.push()
-				val chatRoomId = chatRoomRef.key ?: ""
-				val chatRoomModel = ChatRoomModel(
-					idx = chatRoomId,
-					buyerId = myId,
-					sellerId = sellerId,
-					postId = postId,
-					createdAt = System.currentTimeMillis()
-				)
-				// post DB 추가
-				postDB.child(postId).child(CHILD_CHAT).child(myId).setValue(chatRoomModel)
-				userDB.child(sellerId).child(CHILD_CHAT).child(chatRoomId).setValue(chatRoomModel)
-				// 나의 DB 추가
-				userDB.child(myId).child(CHILD_CHAT).child(chatRoomId).setValue(chatRoomModel)
-				// 채팅 DB 추가
-				chatRoomRef.setValue(chatRoomModel)
+				sellerId = _seller.idx!!
+
+
+				postDB.child(postId).child(CHILD_CHAT).child(myId).get().addOnSuccessListener {
+					if (it.exists()) {
+//						Log.d(MYDEBUG, "onCreate: 채팅방이 존재합니다.")
+						val chatRoomModel = it.getValue(ChatRoomModel::class.java)!!
+						chatRoomId = chatRoomModel.idx!!
+//						Log.d(MYDEBUG, "onCreate: $chatRoomId")
+					} else {
+//						Log.d(MYDEBUG, "onCreate: 채팅방이 없습니다.")
+						val chatRoomRef = chatDB.push()
+						chatRoomId = chatRoomRef.key ?: ""
+						val chatRoomModel = ChatRoomModel(
+							idx = chatRoomId,
+							buyerId = myId,
+							sellerId = sellerId,
+							postId = postId,
+							createdAt = System.currentTimeMillis()
+						)
+						// post DB 추가
+						postDB.child(postId).child(CHILD_CHAT).child(myId).setValue(chatRoomModel)
+						userDB.child(sellerId).child(CHILD_CHAT).child(chatRoomId).setValue(chatRoomModel)
+						// 나의 DB 추가
+						userDB.child(myId).child(CHILD_CHAT).child(chatRoomId).setValue(chatRoomModel)
+						// 채팅 DB 추가
+						chatRoomRef.setValue(chatRoomModel)
+					}
+				}
+
+				/*
+				*/
 
 				initViews()
 				initCancelButton()
-				initChatButton(chatRoomId, postId, sellerId)
+				initChatButton()
 			}.addOnFailureListener {
 //				Log.d(MYDEBUG, "onCreate: $it")
 			}
@@ -104,7 +124,7 @@ class ViewPostActivity : AppCompatActivity() {
 			tvNickname.text = seller.nickname
 			tvDetail.text = postModel.detail
 
-			if (postModel!!.imageUrl.isNotEmpty()) {
+			if (postModel.imageUrl!!.isNotEmpty()) {
 				Glide.with(ivPhoto.context)
 					.load(postModel.imageUrl)
 					.into(ivPhoto)
@@ -119,7 +139,7 @@ class ViewPostActivity : AppCompatActivity() {
 		}
 	}
 
-	private fun initChatButton(chatRoomId: String, postId: String, sellerId: String) {
+	private fun initChatButton() {
 		// Chat 버튼 클릭 이벤트
 		binding.ivChat.setOnClickListener {
 			// 채팅 Activity 를 엽니다.

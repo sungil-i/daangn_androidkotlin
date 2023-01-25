@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
@@ -21,7 +22,9 @@ import kr.sungil.daangn.adapter.ChatAdapter
 import kr.sungil.daangn.databinding.ActivityChatBinding
 import kr.sungil.daangn.home.ViewPostActivity
 import kr.sungil.daangn.models.ChatModel
+import kr.sungil.daangn.models.ChatRoomModel
 import kr.sungil.daangn.models.PostModel
+import kr.sungil.daangn.models.UserModel
 import java.text.NumberFormat
 
 class ChatActivity : AppCompatActivity() {
@@ -32,6 +35,10 @@ class ChatActivity : AppCompatActivity() {
 	private lateinit var adapter: ChatAdapter
 	private lateinit var listener: Any
 	private val chatList = mutableListOf<ChatModel>()
+	private lateinit var chatRoomModel: ChatRoomModel
+	private lateinit var postModel: PostModel
+	private lateinit var sellerModel: UserModel
+	private lateinit var myModel: UserModel
 	private lateinit var chatRoomId: String
 	private lateinit var postId: String
 	private lateinit var sellerId: String
@@ -55,6 +62,60 @@ class ChatActivity : AppCompatActivity() {
 		if (AUTH.currentUser == null) finish()
 		myId = AUTH.currentUser!!.uid
 
+		// Firebase 에서 데이터 객체 가져오기
+		chatDB.child(chatRoomId).get().addOnSuccessListener {
+			val _chatRoomModel = it.getValue(ChatRoomModel::class.java)!!
+			chatRoomModel = ChatRoomModel(
+				idx = _chatRoomModel.idx ?: "",
+				buyerId = _chatRoomModel.buyerId ?: "",
+				sellerId = _chatRoomModel.sellerId ?: "",
+				postId = _chatRoomModel.postId ?: "",
+				createdAt = _chatRoomModel.createdAt ?: 0
+			)
+		}
+		postDB.child(postId).get().addOnSuccessListener {
+			val _postModel = it.getValue(PostModel::class.java)!!
+			postModel = PostModel(
+				idx = _postModel.idx ?: "",
+				sellerId = _postModel.sellerId ?: "",
+				title = _postModel.title ?: "",
+				createdAt = _postModel.createdAt ?: 0,
+				price = _postModel.price ?: 0,
+				imageUrl = _postModel.imageUrl ?: "",
+				detail = _postModel.detail ?: ""
+			)
+			initCardView()
+		}
+		userDB.child(sellerId).get().addOnSuccessListener {
+			val _sellerModel = it.getValue(UserModel::class.java)!!
+			sellerModel = UserModel(
+				idx = _sellerModel.idx ?: "",
+				email = _sellerModel.email ?: "",
+				name = _sellerModel.name ?: "",
+				nickname = _sellerModel.nickname ?: ""
+			)
+		}
+		userDB.child(myId).get().addOnSuccessListener {
+			val _myModel = it.getValue(UserModel::class.java)!!
+			myModel = UserModel(
+				idx = _myModel.idx ?: "",
+				email = _myModel.email ?: "",
+				name = _myModel.name ?: "",
+				nickname = _myModel.nickname ?: ""
+			)
+			if (myModel.nickname!!.isEmpty()) {
+				Toast.makeText(
+					applicationContext,
+					"채팅 닉네임 생성 후 사용해주세요.\n" +
+							"채팅 닉네임은 나의 정보에서 만들 수 있습니다.",
+					Toast.LENGTH_LONG
+				).show()
+				finish()
+			}
+		}
+
+//		Log.d(MYDEBUG, "onCreate: $chatRoomId, $postId, $sellerId, $myId")
+
 		listener = object : ChildEventListener {
 			override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
 				val chatModel = snapshot.getValue(ChatModel::class.java)
@@ -76,49 +137,29 @@ class ChatActivity : AppCompatActivity() {
 		adapter = ChatAdapter()
 		binding.rvChats.adapter = adapter
 
-		initCardView()
 		initCancelButton()
 	}
 
 	private fun initCardView() {
-		postDB.child(postId).get().addOnSuccessListener {
-			val postModel = it.getValue(PostModel::class.java)
-			postModel ?: return@addOnSuccessListener
-
-			binding.apply {
-				val priceFormat = NumberFormat.getInstance()
-
-				tvCvTitle.text = postModel.title
-				tvCvPrice.text = "${priceFormat.format(postModel.price)}원"
-
-				if (postModel.imageUrl.isNotEmpty()) {
-					Glide.with(ivCvPhoto.context)
-						.load(postModel.imageUrl)
-						.into(ivCvPhoto)
-				}
-
-				tvCvTitle.setOnClickListener {
-					val intent = Intent(applicationContext, ViewPostActivity::class.java)
-					intent.putExtra("idx", postId)
-					startActivity(intent)
-					finish()
-				}
-			}
-		}.addOnFailureListener {
-			Log.d(MYDEBUG, "initCardView: $it")
-		}
-		/*binding.apply {
+		binding.apply {
 			val priceFormat = NumberFormat.getInstance()
 
 			tvCvTitle.text = postModel.title
 			tvCvPrice.text = "${priceFormat.format(postModel.price)}원"
 
-			if (postModel.imageUrl.isNotEmpty()) {
+			if (postModel.imageUrl!!.isNotEmpty()) {
 				Glide.with(ivCvPhoto.context)
 					.load(postModel.imageUrl)
 					.into(ivCvPhoto)
 			}
-		}*/
+
+			tvCvTitle.setOnClickListener {
+				val intent = Intent(applicationContext, ViewPostActivity::class.java)
+				intent.putExtra("idx", postId)
+				startActivity(intent)
+				finish()
+			}
+		}
 	}
 
 	private fun initCancelButton() {

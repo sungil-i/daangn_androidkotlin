@@ -3,7 +3,7 @@ package kr.sungil.daangn.models
 import com.google.firebase.database.Exclude
 
 data class UserModel(
-	val idx: String,
+	val idx: String?,
 	var email: String?,
 	var name: String?,
 	var nickname: String?,

@@ -43,10 +43,10 @@ class PostAdapter(
 		fun bind(postModel: PostModel) {
 			// Format 을 지정합니다.
 			val dateFormat = SimpleDateFormat("yyyy. M. d.")
-			val date = Date(postModel.createdAt)
+			val date = Date(postModel.createdAt!!)
 			val priceFormat = NumberFormat.getInstance()
 			// 몇시간 전에 올렸는지를 체크하기 위해 시간차이를 구합니다(단위: 밀리초, 0.001초).
-			val diffTime: Long = System.currentTimeMillis() - postModel.createdAt
+			val diffTime: Long = System.currentTimeMillis() - postModel.createdAt!!
 
 			binding.apply {
 				// 리싸이클러뷰에 item 값을 보여줍니다.
@@ -55,7 +55,7 @@ class PostAdapter(
 				tvDate.text = "${dateFormat.format(date)}"
 				tvPrice.text = "${priceFormat.format(postModel.price)}원"
 
-				if (postModel.imageUrl.isNotEmpty()) {
+				if (postModel.imageUrl!!.isNotEmpty()) {
 					Glide.with(ivProduct)
 						.load(postModel.imageUrl)
 						.into(ivProduct)
