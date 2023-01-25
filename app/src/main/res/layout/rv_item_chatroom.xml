@@ -20,6 +20,59 @@
 		tools:src="@drawable/ic_launcher_background" />
 
 
+	<TextView
+		android:id="@+id/tv_title"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="10dp"
+		android:layout_marginEnd="10dp"
+		android:ellipsize="end"
+		android:maxLines="1"
+		android:textColor="@color/dark_gray"
+		android:textSize="16sp"
+		android:textStyle="bold"
+		app:layout_constraintEnd_toStartOf="@+id/iv_product"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="@+id/iv_product"
+		tools:text="네모싹싹 회전 탈수 물걸레 청소기aaaaaaaaaaaaaaa" />
+
+	<TextView
+		android:id="@+id/tv_nickname"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="10dp"
+		android:layout_marginTop="10dp"
+		android:textColor="@color/black"
+		android:textSize="16sp"
+		android:textStyle="bold"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/tv_title"
+		tools:text="너른바위" />
+
+	<TextView
+		android:id="@+id/tv_duration"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="10dp"
+		android:textSize="14sp"
+		app:layout_constraintBottom_toBottomOf="@+id/tv_nickname"
+		app:layout_constraintStart_toEndOf="@+id/tv_nickname"
+		app:layout_constraintTop_toTopOf="@+id/tv_nickname"
+		tools:text="3일전" />
+
+	<TextView
+		android:id="@+id/tv_chat"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:ellipsize="end"
+		android:maxLines="1"
+		android:textColor="@color/black"
+		android:textSize="16sp"
+		app:layout_constraintEnd_toStartOf="@id/iv_product"
+		app:layout_constraintStart_toStartOf="@+id/tv_nickname"
+		app:layout_constraintTop_toBottomOf="@+id/tv_nickname"
+		tools:text="감사합니다 새해복 많이 받으세요~^^aaaaaaaaaaaaaaa" />
+
 	<View
 		android:layout_width="0dp"
 		android:layout_height="1dp"
