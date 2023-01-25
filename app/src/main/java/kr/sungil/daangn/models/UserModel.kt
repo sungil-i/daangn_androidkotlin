@@ -3,10 +3,10 @@ package kr.sungil.daangn.models
 import com.google.firebase.database.Exclude
 
 data class UserModel(
-	val idx: String?,
-	var email: String?,
-	var name: String?,
-	var nickname: String?,
+	val idx: String = "",
+	var email: String = "",
+	var name: String = "",
+	var nickname: String = "",
 ) : Cloneable {
 
 	// Firebase 연결을 위해 생성자가 필요합니다.
