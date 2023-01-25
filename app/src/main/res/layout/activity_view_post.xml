@@ -101,13 +101,15 @@
 				tools:text="닉네임" />
 
 			<ImageView
-				android:layout_width="25dp"
-				android:layout_height="25dp"
-				android:src="@drawable/menu_mypage"
+				android:id="@+id/iv_chat"
+				android:layout_width="40dp"
+				android:layout_height="40dp"
 				android:layout_marginEnd="5dp"
-				app:layout_constraintTop_toTopOf="@id/tv_price"
+				android:elevation="10dp"
+				android:src="@drawable/menu_chat"
 				app:layout_constraintEnd_toStartOf="@+id/tv_nickname"
-				app:tint="@color/gray_cc"/>
+				app:layout_constraintTop_toTopOf="@id/tv_price"
+				app:tint="@color/orange" />
 
 			<ImageView
 				android:id="@+id/iv_photo"

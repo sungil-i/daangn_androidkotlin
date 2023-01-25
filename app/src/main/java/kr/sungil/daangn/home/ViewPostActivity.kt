@@ -1,18 +1,20 @@
 package kr.sungil.daangn.home
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import com.bumptech.glide.Glide
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kr.sungil.daangn.AppConfig.Companion.AUTH
+import kr.sungil.daangn.AppConfig.Companion.CHILD_CHAT
+import kr.sungil.daangn.AppConfig.Companion.DB_CHATS
 import kr.sungil.daangn.AppConfig.Companion.DB_POSTS
 import kr.sungil.daangn.AppConfig.Companion.DB_USERS
-import kr.sungil.daangn.AppConfig.Companion.MYDEBUG
-import kr.sungil.daangn.R
+import kr.sungil.daangn.chat.ChatActivity
 import kr.sungil.daangn.databinding.ActivityViewPostBinding
+import kr.sungil.daangn.models.ChatRoomModel
 import kr.sungil.daangn.models.PostModel
 import kr.sungil.daangn.models.UserModel
 import java.text.NumberFormat
@@ -21,6 +23,7 @@ class ViewPostActivity : AppCompatActivity() {
 	private lateinit var binding: ActivityViewPostBinding
 	private val userDB: DatabaseReference by lazy { Firebase.database.reference.child(DB_USERS) }
 	private val postDB: DatabaseReference by lazy { Firebase.database.reference.child(DB_POSTS) }
+	private val chatDB: DatabaseReference by lazy { Firebase.database.reference.child(DB_CHATS) }
 	private lateinit var postModel: PostModel
 	private lateinit var seller: UserModel
 
@@ -57,8 +60,31 @@ class ViewPostActivity : AppCompatActivity() {
 					nickname = _seller.nickname
 				)
 //				Log.d(MYDEBUG, "onCreate: $seller")
+
+				// 채팅방을 만들고 seller, buyer 모두 접속할 수 있게 합니다.
+				val myId = AUTH.currentUser!!.uid
+				val sellerId = seller.idx
+				val postId = postModel.idx
+				val chatRoomRef = chatDB.push()
+				val chatRoomId = chatRoomRef.key ?: ""
+				val chatRoomModel = ChatRoomModel(
+					idx = chatRoomId,
+					buyerId = myId,
+					sellerId = sellerId,
+					postId = postId,
+					createdAt = System.currentTimeMillis()
+				)
+				// post DB 추가
+				postDB.child(postId).child(CHILD_CHAT).child(myId).setValue(chatRoomModel)
+				userDB.child(sellerId).child(CHILD_CHAT).child(chatRoomId).setValue(chatRoomModel)
+				// 나의 DB 추가
+				userDB.child(myId).child(CHILD_CHAT).child(chatRoomId).setValue(chatRoomModel)
+				// 채팅 DB 추가
+				chatRoomRef.setValue(chatRoomModel)
+
 				initViews()
 				initCancelButton()
+				initChatButton(chatRoomId, postId, sellerId)
 			}.addOnFailureListener {
 //				Log.d(MYDEBUG, "onCreate: $it")
 			}
@@ -89,6 +115,19 @@ class ViewPostActivity : AppCompatActivity() {
 	private fun initCancelButton() {
 		// 취소 버튼 이벤트
 		binding.ivClose.setOnClickListener {
+			finish()
+		}
+	}
+
+	private fun initChatButton(chatRoomId: String, postId: String, sellerId: String) {
+		// Chat 버튼 클릭 이벤트
+		binding.ivChat.setOnClickListener {
+			// 채팅 Activity 를 엽니다.
+			val intent = Intent(applicationContext, ChatActivity::class.java)
+			intent.putExtra("chatRoomId", chatRoomId)
+			intent.putExtra("postId", postId)
+			intent.putExtra("sellerId", sellerId)
+			startActivity(intent)
 			finish()
 		}
 	}

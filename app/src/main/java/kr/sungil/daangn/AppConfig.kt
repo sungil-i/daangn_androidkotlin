@@ -22,5 +22,9 @@ class AppConfig {
 		const val ONE_DAY: Long = ONE_HOUR * 24
 		const val ONE_MONTH: Long = ONE_DAY * 30
 		const val ONE_YEAR: Long = 31557600000
+
+		// Chat ViewHolder
+		const val LEFT_BIASED_CHAT = 1
+		const val RIGHT_BIASED_CHAT = 2
 	}
 }
