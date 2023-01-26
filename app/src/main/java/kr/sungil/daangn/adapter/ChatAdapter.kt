@@ -47,7 +47,7 @@ class ChatAdapter : ListAdapter<ChatModel, RecyclerView.ViewHolder>(diffUtil) {
 	}
 
 	override fun getItemViewType(position: Int): Int {
-		return currentList[position].viewType!!
+		return currentList[position].viewType
 	}
 
 	// inner class Left Biased View Holder
@@ -57,7 +57,7 @@ class ChatAdapter : ListAdapter<ChatModel, RecyclerView.ViewHolder>(diffUtil) {
 		fun bind(chatModel: ChatModel) {
 			binding.apply {
 				val dateFormat = SimpleDateFormat("yyyy. M. d.\na hh:mm", Locale.KOREA)
-				val date = Date(chatModel.createAt!!)
+				val date = Date(chatModel.createAt)
 
 				tvChatNickname.text = chatModel.nickName
 				tvChatEmail.text = chatModel.email
@@ -74,7 +74,7 @@ class ChatAdapter : ListAdapter<ChatModel, RecyclerView.ViewHolder>(diffUtil) {
 		fun bind(chatModel: ChatModel) {
 			binding.apply {
 				val dateFormat = SimpleDateFormat("yyyy. M. d.\na hh:mm", Locale.KOREA)
-				val date = Date(chatModel.createAt!!)
+				val date = Date(chatModel.createAt)
 
 				tvChatMessage.text = chatModel.message
 				tvChatTimestamp.text = "${dateFormat.format(date)}"

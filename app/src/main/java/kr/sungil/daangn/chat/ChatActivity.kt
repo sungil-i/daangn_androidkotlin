@@ -103,7 +103,7 @@ class ChatActivity : AppCompatActivity() {
 				name = _myModel.name ?: "",
 				nickname = _myModel.nickname ?: ""
 			)
-			if (myModel.nickname!!.isEmpty()) {
+			if (myModel.nickname.isEmpty()) {
 				Toast.makeText(
 					applicationContext,
 					"채팅 닉네임 생성 후 사용해주세요.\n" +

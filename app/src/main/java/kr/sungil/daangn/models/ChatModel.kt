@@ -1,5 +1,6 @@
 package kr.sungil.daangn.models
 
+
 data class ChatModel(
 	val idx: String = "",
 	val chatRoomId: String = "",

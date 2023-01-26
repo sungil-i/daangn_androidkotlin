@@ -111,12 +111,12 @@ class MypageFragment : Fragment(R.layout.fragment_mypage) {
 				userDB.child(AUTH.currentUser!!.uid).get().addOnSuccessListener {
 					// Firebase 에서 데이터 가져오기 성공
 					val userModel = it.getValue(UserModel::class.java)
-					if (userModel!!.nickname!!.isNotEmpty()) {
+					if (userModel!!.nickname.isNotEmpty()) {
 						etInfoNickname.setText(userModel.nickname)
 					} else {
 						etInfoNickname.setText("")
 					}
-					if (userModel.name!!.isNotEmpty()) {
+					if (userModel.name.isNotEmpty()) {
 						etInfoName.setText(userModel.name)
 					} else {
 						etInfoName.setText("")

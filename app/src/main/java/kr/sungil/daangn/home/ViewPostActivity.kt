@@ -45,7 +45,7 @@ class ViewPostActivity : AppCompatActivity() {
 		// Firebase 에서 PostModel 을 가져옵니다.
 		postDB.child(idx).get().addOnSuccessListener { post ->
 			val _postModel = post.getValue(PostModel::class.java)!!
-			postId = _postModel.idx!!
+			postId = _postModel.idx
 			postModel = PostModel(
 				idx = _postModel.idx,
 				sellerId = _postModel.sellerId,
@@ -56,7 +56,7 @@ class ViewPostActivity : AppCompatActivity() {
 				detail = _postModel.detail
 			)
 //			Log.d(MYDEBUG, "onCreate: $postModel")
-			userDB.child(_postModel.sellerId!!).get().addOnSuccessListener { user ->
+			userDB.child(_postModel.sellerId).get().addOnSuccessListener { user ->
 				// Firebase 에서 판매자 UserModel 을 가져옵니다.
 				val _seller = user.getValue(UserModel::class.java)!!
 				seller = UserModel(
@@ -69,7 +69,7 @@ class ViewPostActivity : AppCompatActivity() {
 
 				// 채팅방을 만들고 seller, buyer 모두 접속할 수 있게 합니다.
 				val myId = AUTH.currentUser!!.uid
-				sellerId = _seller.idx!!
+				sellerId = _seller.idx
 
 
 				postDB.child(postId).child(CHILD_CHAT).child(myId).get().addOnSuccessListener {
@@ -149,7 +149,7 @@ class ViewPostActivity : AppCompatActivity() {
 			tvNickname.text = seller.nickname
 			tvDetail.text = postModel.detail
 
-			if (postModel.imageUrl!!.isNotEmpty()) {
+			if (postModel.imageUrl.isNotEmpty()) {
 				Glide.with(ivPhoto.context)
 					.load(postModel.imageUrl)
 					.into(ivPhoto)
