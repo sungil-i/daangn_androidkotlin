@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearSmoothScroller
+import androidx.recyclerview.widget.RecyclerView.SmoothScroller
 import com.bumptech.glide.Glide
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
@@ -45,27 +47,7 @@ class ChatActivity : AppCompatActivity() {
 	private lateinit var myId: String
 	private lateinit var myEmail: String
 	private lateinit var myNickname: String
-	private val listener = object : ChildEventListener {
-		override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-			val chatModel = snapshot.getValue(ChatModel::class.java)
-			chatModel ?: return
-
-			chatModel.viewType =
-				if (chatModel.senderId == myId) RIGHT_BIASED_CHAT else LEFT_BIASED_CHAT
-			chatList.add(chatModel)
-			adapter.submitList(chatList)
-			adapter.notifyDataSetChanged()
-		}
-
-		override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-			adapter.submitList(chatList)
-			adapter.notifyDataSetChanged()
-		}
-
-		override fun onChildRemoved(snapshot: DataSnapshot) {}
-		override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
-		override fun onCancelled(error: DatabaseError) {}
-	}
+	private lateinit var listener: Any
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -119,11 +101,30 @@ class ChatActivity : AppCompatActivity() {
 			)
 
 			// RecyclerView 를 연결합니다.
+			adapter = ChatAdapter()
+			binding.rvChats.adapter = adapter
+			listener = object : ChildEventListener {
+				override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+					val chatModel = snapshot.getValue(ChatModel::class.java)
+					chatModel ?: return
+
+					chatModel.viewType =
+						if (chatModel.senderId == myId) RIGHT_BIASED_CHAT else LEFT_BIASED_CHAT
+					chatList.add(chatModel)
+					adapter.submitList(chatList)
+					adapter.notifyDataSetChanged()
+					binding.rvChats.scrollToPosition(chatList.size - 1)
+				}
+
+				override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
+
+				override fun onChildRemoved(snapshot: DataSnapshot) {}
+				override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
+				override fun onCancelled(error: DatabaseError) {}
+			}
 			chatDB.child(chatRoomId).child(CHILD_CHAT)
 				.addChildEventListener(listener as ChildEventListener)
 			chatList.clear()
-			adapter = ChatAdapter()
-			binding.rvChats.adapter = adapter
 
 			initCardView()
 			initSendButton()
@@ -170,6 +171,11 @@ class ChatActivity : AppCompatActivity() {
 				Log.d(MYDEBUG, "initSendButton: $chatModel")
 				chatRef.setValue(chatModel)
 				etMessage.text.clear()
+//				adapter.submitList(chatList)
+//				adapter.notifyDataSetChanged()
+//				adapter.submitList(chatList)
+//				rvChats.scrollToPosition(rvChats.adapter!!.itemCount - 1)
+//				rvChats.scrollToPosition(rvChats.adapter!!.itemCount - 1)
 			}
 		}
 	}
