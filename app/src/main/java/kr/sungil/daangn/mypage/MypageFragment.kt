@@ -147,6 +147,7 @@ class MypageFragment : Fragment(R.layout.fragment_mypage) {
 				ivLogout.isVisible = false
 				// mypage info 정보를 안보이게 한다.
 				clMypage.isVisible = false
+				tvMessage.text = ""
 			} else { // 인증 값이 있을 경우
 				// 상단 Appbar 로그인 정보를 보이게 설정한다.
 				ivLogin.isVisible = false
