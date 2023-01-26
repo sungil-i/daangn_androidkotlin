@@ -75,7 +75,7 @@ class LoginActivity : AppCompatActivity() {
 							// Firebase Database 에 UserModel 객체를 저장합니다.
 							val userModel = UserModel(
 								idx = AUTH.currentUser!!.uid,
-								email = AUTH.currentUser!!.email,
+								email = AUTH.currentUser!!.email!!,
 								name = "",
 								nickname = ""
 							)

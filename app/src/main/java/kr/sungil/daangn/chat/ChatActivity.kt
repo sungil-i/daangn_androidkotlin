@@ -107,7 +107,8 @@ class ChatActivity : AppCompatActivity() {
 				Toast.makeText(
 					applicationContext,
 					"채팅 닉네임 생성 후 사용해주세요.\n" +
-							"채팅 닉네임은 나의 정보에서 만들 수 있습니다.",
+							"채팅 닉네임은 나의 정보에서\n" +
+							"만들 수 있습니다.",
 					Toast.LENGTH_LONG
 				).show()
 				finish()
@@ -128,7 +129,10 @@ class ChatActivity : AppCompatActivity() {
 				adapter.notifyDataSetChanged()
 			}
 
-			override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
+			override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+				adapter.notifyDataSetChanged()
+			}
+
 			override fun onChildRemoved(snapshot: DataSnapshot) {}
 			override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
 			override fun onCancelled(error: DatabaseError) {}

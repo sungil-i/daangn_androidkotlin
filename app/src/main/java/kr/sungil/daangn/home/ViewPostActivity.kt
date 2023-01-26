@@ -76,8 +76,28 @@ class ViewPostActivity : AppCompatActivity() {
 					if (it.exists()) {
 //						Log.d(MYDEBUG, "onCreate: 채팅방이 존재합니다.")
 						val chatRoomModel = it.getValue(ChatRoomModel::class.java)!!
-						chatRoomId = chatRoomModel.idx!!
+						chatRoomId = chatRoomModel.idx
+						val updateChatRoomModel = ChatRoomModel(
+							idx = chatRoomModel.idx,
+							buyerId = chatRoomModel.buyerId,
+							sellerId = chatRoomModel.sellerId,
+							postId = chatRoomModel.postId,
+							createdAt = chatRoomModel.createdAt,
+							title = postModel.title,
+							sellerNickname = seller.nickname,
+							lastMessage = "",
+							imageUrl = postModel.imageUrl,
+							updatedAt = 0
+						)
 //						Log.d(MYDEBUG, "onCreate: $chatRoomId")
+						// 채팅방 정보를 업데이트 합니다.
+						// post DB 업데이트
+						postDB.child(postId).child(CHILD_CHAT).child(myId).updateChildren(updateChatRoomModel.toMap())
+						userDB.child(sellerId).child(CHILD_CHAT).child(chatRoomId).updateChildren(updateChatRoomModel.toMap())
+						// 나의 DB 업데이트
+						userDB.child(myId).child(CHILD_CHAT).child(chatRoomId).updateChildren(updateChatRoomModel.toMap())
+						// 채팅 DB 업데이트
+						chatDB.child(chatRoomId).updateChildren(updateChatRoomModel.toMap())
 					} else {
 //						Log.d(MYDEBUG, "onCreate: 채팅방이 없습니다.")
 						val chatRoomRef = chatDB.push()
@@ -87,7 +107,12 @@ class ViewPostActivity : AppCompatActivity() {
 							buyerId = myId,
 							sellerId = sellerId,
 							postId = postId,
-							createdAt = System.currentTimeMillis()
+							createdAt = System.currentTimeMillis(),
+							title = postModel.title,
+							sellerNickname = seller.nickname,
+							lastMessage = "",
+							imageUrl = postModel.imageUrl,
+							updatedAt = 0
 						)
 						// post DB 추가
 						postDB.child(postId).child(CHILD_CHAT).child(myId).setValue(chatRoomModel)

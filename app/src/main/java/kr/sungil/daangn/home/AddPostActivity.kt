@@ -117,10 +117,15 @@ class AddPostActivity : AppCompatActivity() {
 						hideProgress()
 					})
 				} else { // 이미지가 없을 경우
-					uploadPost(sellerId, title, price, "", detail)
+					Toast.makeText(
+						applicationContext, getString(R.string.image_upload_need), Toast.LENGTH_LONG
+					).show()
+					hideProgress()
+					return@setOnClickListener
+					/*uploadPost(sellerId, title, price, "", detail)
 					Toast.makeText(
 						applicationContext, getString(R.string.post_submit_ok), Toast.LENGTH_LONG
-					).show()
+					).show()*/
 				}
 			}
 		}

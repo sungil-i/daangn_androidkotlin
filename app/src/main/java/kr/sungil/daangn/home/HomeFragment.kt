@@ -91,10 +91,16 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
 				postList.add(postModel)
 				adapter.submitList(postList)
+				adapter.notifyDataSetChanged()
 			}
 
-			override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
-			override fun onChildRemoved(snapshot: DataSnapshot) {}
+			override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+				adapter.notifyDataSetChanged()
+			}
+
+			override fun onChildRemoved(snapshot: DataSnapshot) {
+				adapter.notifyDataSetChanged()
+			}
 			override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
 			override fun onCancelled(error: DatabaseError) {}
 		}
