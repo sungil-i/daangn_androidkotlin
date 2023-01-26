@@ -47,10 +47,14 @@ class ChatRoomAdapter(
 					tvDuration.text = getDiffTime(chatRoomModel.updatedAt)
 				}
 
-				if(chatRoomModel.imageUrl.isNotEmpty()) {
+				if (chatRoomModel.imageUrl.isNotEmpty()) {
 					Glide.with(ivProduct.context)
 						.load(chatRoomModel.imageUrl)
 						.into(ivProduct)
+				}
+
+				root.setOnClickListener {
+					onItemClicked(chatRoomModel)
 				}
 			}
 		}

@@ -19,6 +19,7 @@ import kr.sungil.daangn.AppConfig.Companion.LEFT_BIASED_CHAT
 import kr.sungil.daangn.AppConfig.Companion.MYDEBUG
 import kr.sungil.daangn.AppConfig.Companion.RIGHT_BIASED_CHAT
 import kr.sungil.daangn.adapter.ChatAdapter
+import kr.sungil.daangn.adapter.ChatRoomAdapter
 import kr.sungil.daangn.databinding.ActivityChatBinding
 import kr.sungil.daangn.home.ViewPostActivity
 import kr.sungil.daangn.models.ChatModel
@@ -33,7 +34,6 @@ class ChatActivity : AppCompatActivity() {
 	private val postDB: DatabaseReference by lazy { Firebase.database.reference.child(AppConfig.DB_POSTS) }
 	private val chatDB: DatabaseReference by lazy { Firebase.database.reference.child(AppConfig.DB_CHATS) }
 	private lateinit var adapter: ChatAdapter
-	private lateinit var listener: Any
 	private val chatList = mutableListOf<ChatModel>()
 	private lateinit var chatRoomModel: ChatRoomModel
 	private lateinit var postModel: PostModel
@@ -43,6 +43,29 @@ class ChatActivity : AppCompatActivity() {
 	private lateinit var postId: String
 	private lateinit var sellerId: String
 	private lateinit var myId: String
+	private lateinit var myEmail: String
+	private lateinit var myNickname: String
+	private val listener = object : ChildEventListener {
+		override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+			val chatModel = snapshot.getValue(ChatModel::class.java)
+			chatModel ?: return
+
+			chatModel.viewType =
+				if (chatModel.senderId == myId) RIGHT_BIASED_CHAT else LEFT_BIASED_CHAT
+			chatList.add(chatModel)
+			adapter.submitList(chatList)
+			adapter.notifyDataSetChanged()
+		}
+
+		override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+			adapter.submitList(chatList)
+			adapter.notifyDataSetChanged()
+		}
+
+		override fun onChildRemoved(snapshot: DataSnapshot) {}
+		override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
+		override fun onCancelled(error: DatabaseError) {}
+	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -63,16 +86,26 @@ class ChatActivity : AppCompatActivity() {
 		myId = AUTH.currentUser!!.uid
 
 		// Firebase 에서 데이터 객체 가져오기
-		chatDB.child(chatRoomId).get().addOnSuccessListener {
-			val _chatRoomModel = it.getValue(ChatRoomModel::class.java)!!
-			chatRoomModel = ChatRoomModel(
-				idx = _chatRoomModel.idx ?: "",
-				buyerId = _chatRoomModel.buyerId ?: "",
-				sellerId = _chatRoomModel.sellerId ?: "",
-				postId = _chatRoomModel.postId ?: "",
-				createdAt = _chatRoomModel.createdAt ?: 0
+		userDB.child(myId).get().addOnSuccessListener {
+			val _myModel = it.getValue(UserModel::class.java)!!
+			myModel = UserModel(
+				idx = _myModel.idx ?: "",
+				email = _myModel.email ?: "",
+				name = _myModel.name ?: "",
+				nickname = _myModel.nickname ?: ""
 			)
+			myEmail = myModel.email
+			myNickname = myModel.nickname
+			if (myModel.nickname.isEmpty()) {
+				Toast.makeText(
+					applicationContext,
+					"채팅 닉네임 생성 후 사용해주세요.\n" + "채팅 닉네임은 나의 정보에서\n" + "만들 수 있습니다.",
+					Toast.LENGTH_LONG
+				).show()
+				finish()
+			}
 		}
+
 		postDB.child(postId).get().addOnSuccessListener {
 			val _postModel = it.getValue(PostModel::class.java)!!
 			postModel = PostModel(
@@ -84,64 +117,18 @@ class ChatActivity : AppCompatActivity() {
 				imageUrl = _postModel.imageUrl ?: "",
 				detail = _postModel.detail ?: ""
 			)
+
+			// RecyclerView 를 연결합니다.
+			chatDB.child(chatRoomId).child(CHILD_CHAT)
+				.addChildEventListener(listener as ChildEventListener)
+			chatList.clear()
+			adapter = ChatAdapter()
+			binding.rvChats.adapter = adapter
+
 			initCardView()
+			initSendButton()
+			initCancelButton()
 		}
-		userDB.child(sellerId).get().addOnSuccessListener {
-			val _sellerModel = it.getValue(UserModel::class.java)!!
-			sellerModel = UserModel(
-				idx = _sellerModel.idx ?: "",
-				email = _sellerModel.email ?: "",
-				name = _sellerModel.name ?: "",
-				nickname = _sellerModel.nickname ?: ""
-			)
-		}
-		userDB.child(myId).get().addOnSuccessListener {
-			val _myModel = it.getValue(UserModel::class.java)!!
-			myModel = UserModel(
-				idx = _myModel.idx ?: "",
-				email = _myModel.email ?: "",
-				name = _myModel.name ?: "",
-				nickname = _myModel.nickname ?: ""
-			)
-			if (myModel.nickname.isEmpty()) {
-				Toast.makeText(
-					applicationContext,
-					"채팅 닉네임 생성 후 사용해주세요.\n" +
-							"채팅 닉네임은 나의 정보에서\n" +
-							"만들 수 있습니다.",
-					Toast.LENGTH_LONG
-				).show()
-				finish()
-			}
-		}
-
-//		Log.d(MYDEBUG, "onCreate: $chatRoomId, $postId, $sellerId, $myId")
-
-		listener = object : ChildEventListener {
-			override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-				val chatModel = snapshot.getValue(ChatModel::class.java)
-				chatModel ?: return
-
-				chatModel.viewType =
-					if (chatModel.senderId == AUTH.currentUser!!.uid) RIGHT_BIASED_CHAT else LEFT_BIASED_CHAT
-				chatList.add(chatModel)
-				adapter.submitList(chatList)
-				adapter.notifyDataSetChanged()
-			}
-
-			override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-				adapter.notifyDataSetChanged()
-			}
-
-			override fun onChildRemoved(snapshot: DataSnapshot) {}
-			override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
-			override fun onCancelled(error: DatabaseError) {}
-		}
-		// RecyclerView 를 연결합니다.
-		adapter = ChatAdapter()
-		binding.rvChats.adapter = adapter
-
-		initCancelButton()
 	}
 
 	private fun initCardView() {
@@ -152,9 +139,7 @@ class ChatActivity : AppCompatActivity() {
 			tvCvPrice.text = "${priceFormat.format(postModel.price)}원"
 
 			if (postModel.imageUrl!!.isNotEmpty()) {
-				Glide.with(ivCvPhoto.context)
-					.load(postModel.imageUrl)
-					.into(ivCvPhoto)
+				Glide.with(ivCvPhoto.context).load(postModel.imageUrl).into(ivCvPhoto)
 			}
 
 			tvCvTitle.setOnClickListener {
@@ -162,6 +147,29 @@ class ChatActivity : AppCompatActivity() {
 				intent.putExtra("idx", postId)
 				startActivity(intent)
 				finish()
+			}
+		}
+	}
+
+	private fun initSendButton() {
+		binding.apply {
+			btSend.setOnClickListener {
+				if (binding.etMessage.text.isEmpty()) return@setOnClickListener
+				val chatRef = chatDB.child(chatRoomId).child(CHILD_CHAT).push()
+				val chatKey = chatRef.key ?: ""
+				val chatModel = ChatModel(
+					idx = chatKey,
+					chatRoomId = chatRoomId,
+					senderId = myId,
+					email = myEmail,
+					nickName = myNickname,
+					message = etMessage.text.toString(),
+					viewType = 0,
+					createAt = System.currentTimeMillis()
+				)
+				Log.d(MYDEBUG, "initSendButton: $chatModel")
+				chatRef.setValue(chatModel)
+				etMessage.text.clear()
 			}
 		}
 	}

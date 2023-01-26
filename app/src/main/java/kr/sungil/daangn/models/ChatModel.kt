@@ -9,7 +9,7 @@ data class ChatModel(
 	var nickName: String = "",
 	var message: String = "",
 	var viewType: Int = 0,
-	var createAt: Long = 0
+	val createAt: Long = 0
 ) {
 	constructor() : this("", "", "", "", "", "", 0, 0)
 }

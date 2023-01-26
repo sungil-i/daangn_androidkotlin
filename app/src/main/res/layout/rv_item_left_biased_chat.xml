@@ -4,7 +4,7 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	android:layout_marginBottom="10dp">
+	android:layout_marginBottom="30dp">
 
 	<ImageView
 		android:id="@+id/iv_chat_icon"
@@ -46,13 +46,15 @@
 		android:layout_marginStart="10dp"
 		android:layout_marginTop="5dp"
 		android:layout_marginEnd="100dp"
+		android:maxWidth="270dp"
+		android:minWidth="30dp"
 		android:textColor="@color/black"
 		android:textSize="16sp"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintHorizontal_bias="0.0"
+		android:textStyle="bold"
 		app:layout_constraintStart_toStartOf="@+id/tv_chat_nickname"
 		app:layout_constraintTop_toBottomOf="@+id/tv_chat_nickname"
-		tools:text="메시지입니다.\n우하하울랄라\nHello World.\nasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf" />
+		tools:text="메시지입니다.\n우하하울랄라\nHello World.\nasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfa" />
+	<!--		tools:text="메시지입니다.\n우하하울랄라\nHello World.\nasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf" />-->
 
 	<TextView
 		android:id="@+id/tv_chat_timestamp"

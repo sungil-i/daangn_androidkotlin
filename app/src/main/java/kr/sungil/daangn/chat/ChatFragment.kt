@@ -82,7 +82,11 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
 				.addChildEventListener(listener as ChildEventListener)
 			chatRoomList.clear()
 			adapter = ChatRoomAdapter(onItemClicked = {
-
+				val intent = Intent(context, ChatActivity::class.java)
+				intent.putExtra("chatRoomId", it.idx)
+				intent.putExtra("postId", it.postId)
+				intent.putExtra("sellerId", it.sellerId)
+				startActivity(intent)
 			})
 			binding!!.rvChatrooms.adapter = adapter
 		}
