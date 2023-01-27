@@ -95,14 +95,46 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 			}
 
 			override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+				val postModel = snapshot.getValue(PostModel::class.java)
+				postModel ?: return
+
+				for (p in postList) {
+					if (p.idx == postModel.idx) {
+						p.title = postModel.title
+						p.price = postModel.price
+						p.imageUrl = postModel.imageUrl
+						p.detail = postModel.detail
+					}
+				}
 				adapter.submitList(postList)
 				adapter.notifyDataSetChanged()
 			}
 
 			override fun onChildRemoved(snapshot: DataSnapshot) {
+				val postModel = snapshot.getValue(PostModel::class.java)
+				postModel ?: return
+
+				var post: PostModel? = null
+				for (p in postList) {
+					if (p.idx == postModel.idx) {
+						post = PostModel(
+							idx = p.idx,
+							sellerId = p.sellerId,
+							title = p.title,
+							createdAt = p.createdAt,
+							price = p.price,
+							imageUrl = p.imageUrl,
+							detail = p.detail
+						)
+					}
+				}
+				if (post != null) {
+					postList.remove(post)
+				}
 				adapter.submitList(postList)
 				adapter.notifyDataSetChanged()
 			}
+
 			override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
 			override fun onCancelled(error: DatabaseError) {}
 		}
