@@ -85,9 +85,9 @@ class ViewPostActivity : AppCompatActivity() {
 							createdAt = chatRoomModel.createdAt,
 							title = postModel.title,
 							sellerNickname = seller.nickname,
-							lastMessage = "",
+							lastMessage =chatRoomModel.lastMessage,
 							imageUrl = postModel.imageUrl,
-							updatedAt = 0
+							updatedAt = chatRoomModel.updatedAt
 						)
 //						Log.d(MYDEBUG, "onCreate: $chatRoomId")
 						// 채팅방 정보를 업데이트 합니다.

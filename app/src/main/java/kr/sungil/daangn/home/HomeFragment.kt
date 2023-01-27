@@ -117,15 +117,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 				var post: PostModel? = null
 				for (p in postList) {
 					if (p.idx == postModel.idx) {
-						post = PostModel(
-							idx = p.idx,
-							sellerId = p.sellerId,
-							title = p.title,
-							createdAt = p.createdAt,
-							price = p.price,
-							imageUrl = p.imageUrl,
-							detail = p.detail
-						)
+						post = p
 					}
 				}
 				if (post != null) {

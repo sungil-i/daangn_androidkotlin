@@ -59,21 +59,14 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
 					// recyclerView 에 추가할 조건을 정해서 추가할 수 있다.
 					if (chatRoomModel.sellerNickname.isNotEmpty()) {
 						chatRoomList.add(chatRoomModel)
+						adapter.submitList(chatRoomList)
+						adapter.notifyDataSetChanged()
 					}
-					adapter.submitList(chatRoomList)
-					adapter.notifyDataSetChanged()
 				}
 
-				override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-					adapter.notifyDataSetChanged()
-				}
-
-				override fun onChildRemoved(snapshot: DataSnapshot) {
-					adapter.notifyDataSetChanged()
-				}
-
+				override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) { }
+				override fun onChildRemoved(snapshot: DataSnapshot) {}
 				override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
-
 				override fun onCancelled(error: DatabaseError) {}
 			}
 
