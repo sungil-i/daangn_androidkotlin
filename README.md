@@ -6,12 +6,12 @@
 
 ## 2. 사용자 정보 
 
-<img src="./images/2-login.png" width="300" height="auto" style="display: inline-block" /><img src="./images/2-user-info.png" width="300" height="auto" style="display: inline-block" />
+<img src="./images/2-login.png" width="300" height="auto" style="display: inline-block" /><img src="./images/2-user-info.png" width="300" height="auto" style="display: inline-block; margin-left:50px; " />
 
 ## 3. 상품 정보 
 
-<img src="./images/3-modify.png" width="300" height="auto" style="display: inline-block" /><img src="./images/3-product.png" width="300" height="auto" style="display: inline-block" />
+<img src="./images/3-modify.png" width="300" height="auto" style="display: inline-block" /><img src="./images/3-product.png" width="300" height="auto" style="display: inline-block margin-left:50px; " />
 
 ## 4. 채팅
 
-<img src="./images/4-chat-1.png" width="300" height="auto" style="display: inline-block" /><img src="./images/4-chat-2.png" width="300" height="auto" style="display: inline-block" />
+<img src="./images/4-chat-1.png" width="300" height="auto" style="display: inline-block" /><img src="./images/4-chat-2.png" width="300" height="auto" style="display: inline-block margin-left:50px; " />
