@@ -40,5 +40,9 @@ project.properties
 *.ipr
 *.iws
 
-##Gradle-based build
+## Gradle-based build
 build/
+
+## VIM
+*.swp
+*~
